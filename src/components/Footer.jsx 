@@ -1,0 +1,73 @@
+import { Mail } from 'lucide-react'
+
+const STUDIO_EMAIL = 'hello@rollyadamstechworld.com.ng'
+
+const quickLinks = [
+  { name: 'Services', href: '#services' },
+  { name: 'Work', href: '#work' },
+  { name: 'About', href: '#about' },
+  { name: 'Contact', href: '#contact' },
+]
+
+export default function Footer() {
+  return (
+    <footer className="bg-ink text-white">
+      <div className="container-max section-padding grid gap-10 md:grid-cols-3">
+        {/* Brand */}
+        <div>
+          <a href="#" className="flex items-center gap-2">
+            <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand text-white font-extrabold">
+              R
+            </span>
+            <span className="text-lg font-extrabold tracking-tight">
+              Rollyadams <span className="text-brand">Webdesign</span>
+            </span>
+          </a>
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-400">
+            We build digital products that solve real problems. SaaS platforms,
+            web apps, and high-converting corporate websites.
+          </p>
+        </div>
+
+        {/* Quick links */}
+        <div>
+          <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-400">
+            Explore
+          </h4>
+          <ul className="mt-4 space-y-3">
+            {quickLinks.map((l) => (
+              <li key={l.name}>
+                <a href={l.href} className="text-sm text-slate-300 transition-colors hover:text-white">
+                  {l.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Contact + family brand */}
+        <div>
+          <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-400">
+            Get in touch
+          </h4>
+          <a
+            href={`mailto:${STUDIO_EMAIL}`}
+            className="mt-4 inline-flex items-center gap-2 text-sm text-slate-300 transition-colors hover:text-white"
+          >
+            <Mail size={16} /> {STUDIO_EMAIL}
+          </a>
+          <p className="mt-6 text-xs text-slate-500">
+            Part of the Rollyadams Techworld family brand.
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t border-white/10">
+        <div className="container-max flex flex-col items-center justify-between gap-2 px-6 py-6 text-xs text-slate-500 sm:flex-row">
+          <span>© {new Date().getFullYear()} Rollyadams Webdesign. All rights reserved.</span>
+          <span>Lagos, Nigeria · Working worldwide</span>
+        </div>
+      </div>
+    </footer>
+  )
+}
