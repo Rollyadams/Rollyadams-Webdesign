@@ -1,0 +1,80 @@
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
+
+const links = [
+  { name: 'Services', href: '#services' },
+  { name: 'Work', href: '#work' },
+  { name: 'About', href: '#about' },
+  { name: 'Contact', href: '#contact' },
+]
+
+export default function Navbar() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-md border-b border-slate-200">
+      <nav className="container-max flex items-center justify-between px-6 py-4">
+        {/* Logo */}
+        <a href="#" className="flex items-center gap-2">
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand text-white font-extrabold">
+            R
+          </span>
+          <span className="text-lg font-extrabold tracking-tight">
+            Rollyadams <span className="text-brand">Webdesign</span>
+          </span>
+        </a>
+
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-8">
+          {links.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              className="text-sm font-medium text-muted hover:text-ink transition-colors"
+            >
+              {link.name}
+            </a>
+          ))}
+          <a
+            href="#contact"
+            className="rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand/30 transition-all hover:bg-brand-dark hover:-translate-y-0.5"
+          >
+            Book a Call
+          </a>
+        </div>
+
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden text-ink"
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
+        >
+          {open ? <X size={26} /> : <Menu size={26} />}
+        </button>
+      </nav>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden border-t border-slate-200 bg-surface px-6 py-4 flex flex-col gap-4">
+          {links.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              className="text-base font-medium text-muted hover:text-ink"
+            >
+              {link.name}
+            </a>
+          ))}
+          <a
+            href="#contact"
+            onClick={() => setOpen(false)}
+            className="rounded-lg bg-brand px-5 py-3 text-center text-sm font-semibold text-white"
+          >
+            Book a Call
+          </a>
+        </div>
+      )}
+    </header>
+  )
+}
