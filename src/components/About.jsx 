@@ -1,0 +1,60 @@
+import { motion } from 'framer-motion'
+
+const stats = [
+  { value: '4+', label: 'Live platforms shipped' },
+  { value: '24h', label: 'Average response time' },
+  { value: '100%', label: 'Design & build in-house' },
+]
+
+export default function About() {
+  return (
+    <section id="about" className="section-padding bg-white">
+      <div className="container-max grid items-center gap-12 lg:grid-cols-2">
+        {/* Story */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <span className="text-xs font-semibold tracking-widest text-brand uppercase">
+            Who We Are
+          </span>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+            A Lagos-based studio held to a global standard.
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-muted">
+            Rollyadams Webdesign is the digital design arm of the Rollyadams
+            family brand. We partner with startups, NGOs, and growing
+            businesses to turn complex ideas into clean, functional digital
+            products — from SaaS dashboards to high-trust corporate websites.
+          </p>
+          <p className="mt-4 text-lg leading-relaxed text-muted">
+            Every project we ship is designed and built in-house, tested on
+            real devices, and measured by one question: does it solve a real
+            problem?
+          </p>
+        </motion.div>
+
+        {/* Stats strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="grid gap-6 sm:grid-cols-3 lg:grid-cols-1"
+        >
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              className="rounded-2xl border border-slate-200 bg-surface p-6 text-center sm:text-left"
+            >
+              <div className="text-4xl font-extrabold text-brand">{s.value}</div>
+              <div className="mt-1 text-sm font-medium text-muted">{s.label}</div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
