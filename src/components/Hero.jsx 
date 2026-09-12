@@ -1,0 +1,69 @@
+import { motion } from 'framer-motion'
+import { ArrowRight, CalendarClock } from 'lucide-react'
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 },
+  },
+}
+
+const item = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+}
+
+export default function Hero() {
+  return (
+    <section className="relative overflow-hidden pt-32 pb-24 section-padding">
+      {/* Soft brand glow in the background (high-tech accent) */}
+      <div className="pointer-events-none absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
+
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="container-max relative flex flex-col items-center text-center"
+      >
+        <motion.span
+          variants={item}
+          className="mb-6 rounded-full border border-brand/20 bg-brand/10 px-4 py-1.5 text-xs font-semibold tracking-widest text-brand uppercase"
+        >
+          Digital Product Studio
+        </motion.span>
+
+        <motion.h1
+          variants={item}
+          className="max-w-4xl text-4xl font-extrabold leading-tight tracking-tight md:text-6xl"
+        >
+          We build digital products that solve{' '}
+          <span className="text-brand">real problems.</span>
+        </motion.h1>
+
+        <motion.p
+          variants={item}
+          className="mt-6 max-w-2xl text-lg text-muted md:text-xl"
+        >
+          We are a digital design studio specializing in SaaS platforms, web
+          apps, and high-converting corporate websites.
+        </motion.p>
+
+        <motion.div variants={item} className="mt-10 flex flex-col gap-4 sm:flex-row">
+          <a
+            href="#work"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-8 py-4 text-base font-semibold text-white shadow-lg shadow-brand/30 transition-all hover:bg-brand-dark hover:-translate-y-0.5"
+          >
+            View Our Work <ArrowRight size={18} />
+          </a>
+          <a
+            href="#contact"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-8 py-4 text-base font-semibold text-ink transition-all hover:border-ink"
+          >
+            <CalendarClock size={18} /> Book a 15-min Call
+          </a>
+        </motion.div>
+      </motion.div>
+    </section>
+  )
+}
