@@ -30,10 +30,10 @@ function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-md border-b border-slate-200">
       <nav className="container-max flex items-center justify-between px-6 py-4">
         <a href="#" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand text-white font-extrabold">
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand font-display text-white font-bold">
             R
           </span>
-          <span className="text-lg font-extrabold tracking-tight">
+          <span className="font-display text-lg font-bold tracking-tight">
             Rollyadams <span className="text-brand">WebStudio</span>
           </span>
         </a>
@@ -90,7 +90,7 @@ function Navbar() {
   )
 }
 
-/* ============ HERO — sharp marquee behind, light-pool for text ============ */
+/* ============ HERO ============ */
 const heroContainer = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.15 } },
@@ -112,31 +112,33 @@ function Hero() {
   const loop = [...marqueeShots, ...marqueeShots]
 
   return (
-    <section className="relative overflow-hidden pt-36 pb-28 section-padding">
-      {/* Scrolling work samples — FULL sharpness */}
+    <section className="relative overflow-hidden pt-36 pb-48 section-padding">
+      {/* Tilted exhibit shelf — your shipped work, composed on purpose */}
       <div
         aria-hidden
-        className="marquee pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2"
+        className="pointer-events-none absolute inset-x-0 top-[58%] rotate-[-2deg] scale-105"
       >
-        <div className="marquee-track">
-          {loop.map((shot, i) => (
-            <img
-              key={i}
-              src={shot.src}
-              alt={shot.alt}
-              loading="lazy"
-              className="mr-6 h-60 w-80 md:h-80 md:w-[28rem] rounded-2xl object-cover shadow-xl border border-slate-200"
-            />
-          ))}
+        <div className="marquee">
+          <div className="marquee-track">
+            {loop.map((shot, i) => (
+              <img
+                key={i}
+                src={shot.src}
+                alt={shot.alt}
+                loading="lazy"
+                className="mr-6 h-56 w-80 md:h-72 md:w-[26rem] rounded-2xl object-cover shadow-xl border border-slate-200"
+              />
+            ))}
+          </div>
         </div>
+        <span className="absolute -top-5 left-[6%] rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-semibold text-muted shadow-md">
+          Live from the workshop →
+        </span>
       </div>
 
-      {/* Radial light-pool so the headline stays perfectly readable */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_62%_58%_at_50%_45%,rgba(248,250,252,0.97),rgba(248,250,252,0.85)_45%,rgba(248,250,252,0)_80%)]" />
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-surface to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-surface to-transparent" />
+      {/* Readability pool for the headline */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_62%_52%_at_50%_36%,rgba(248,250,252,0.97),rgba(248,250,252,0.85)_45%,rgba(248,250,252,0)_80%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-surface to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-surface to-transparent" />
 
       <motion.div
         variants={heroContainer}
@@ -148,23 +150,24 @@ function Hero() {
           variants={heroItem}
           className="mb-6 rounded-full border border-brand/20 bg-white/80 px-4 py-1.5 text-xs font-semibold tracking-widest text-brand uppercase backdrop-blur"
         >
-          Digital Product Studio
+          9+ Live Products Shipped
         </motion.span>
 
         <motion.h1
           variants={heroItem}
-          className="max-w-4xl text-4xl font-extrabold leading-tight tracking-tight md:text-6xl"
+          className="font-display max-w-4xl text-4xl font-bold leading-tight tracking-tight md:text-6xl"
         >
-          We build digital products that solve{' '}
-          <span className="text-brand">real problems.</span>
+          We design it. We build it.{' '}
+          <span className="text-brand">It ships.</span>
         </motion.h1>
 
         <motion.p
           variants={heroItem}
           className="mt-6 max-w-2xl text-lg text-muted md:text-xl"
         >
-          We are a digital design studio specializing in SaaS platforms, web
-          apps, and high-converting corporate websites.
+          Election intelligence platforms. School management systems. AI
+          content tools. Support portals. Nine-plus live products — designed
+          and built in-house from Lagos.
         </motion.p>
 
         <motion.div
@@ -175,16 +178,46 @@ function Hero() {
             href="#work"
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-8 py-4 text-base font-semibold text-white shadow-lg shadow-brand/30 transition-all hover:bg-brand-dark hover:-translate-y-0.5"
           >
-            View Our Work <ArrowRight size={18} />
+            See what we've shipped <ArrowRight size={18} />
           </a>
           <a
             href="#contact"
             className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-8 py-4 text-base font-semibold text-ink transition-all hover:border-ink"
           >
-            <CalendarClock size={18} /> Book a 15-min Call
+            <CalendarClock size={18} /> Talk to a designer
           </a>
         </motion.div>
       </motion.div>
+    </section>
+  )
+}
+
+/* ============ MANIFESTO ============ */
+function Manifesto() {
+  return (
+    <section className="bg-ink py-24 md:py-32">
+      <div className="container-max px-6 text-center">
+        <motion.h2
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="font-display mx-auto max-w-4xl text-3xl font-bold leading-snug tracking-tight text-white md:text-5xl"
+        >
+          From the idea in your head to the product in your{' '}
+          <span className="text-blue-400">users' hands.</span>
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="mx-auto mt-6 max-w-2xl text-base text-slate-400 md:text-lg"
+        >
+          Mockups don't move businesses. Working products do. Everything you
+          see here is live, clickable, and in use today.
+        </motion.p>
+      </div>
     </section>
   )
 }
@@ -231,7 +264,7 @@ function BrowserFrame({ label, src, alt, pos, className }) {
   )
 }
 
-function ShotFrame({ item, className, phoneClass, browserClass }) {
+function ShotFrame({ item, phoneClass, browserClass }) {
   if (item.frame === 'phone') {
     return (
       <PhoneFrame
@@ -291,7 +324,7 @@ function Services() {
           <span className="text-xs font-semibold tracking-widest text-brand uppercase">
             What We Do
           </span>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+          <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Services built around your goals
           </h2>
         </motion.div>
@@ -442,7 +475,7 @@ function Portfolio() {
           <span className="text-xs font-semibold tracking-widest text-brand uppercase">
             Our Work
           </span>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+          <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Selected projects
           </h2>
         </motion.div>
@@ -474,7 +507,7 @@ function Portfolio() {
               </div>
 
               <div className="p-6">
-                <h3 className="text-lg font-bold group-hover:text-brand transition-colors">
+                <h3 className="font-display text-lg font-bold group-hover:text-brand transition-colors">
                   {p.title}
                 </h3>
                 <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
@@ -524,7 +557,7 @@ function Portfolio() {
                   <span className="text-[11px] font-semibold tracking-widest text-brand uppercase">
                     {p.tag}
                   </span>
-                  <h4 className="mt-1 font-bold">{p.title}</h4>
+                  <h4 className="font-display mt-1 font-bold">{p.title}</h4>
                   <p className="mt-1 text-xs text-muted">{p.subtitle}</p>
                 </div>
               </div>
@@ -556,7 +589,7 @@ function About() {
           <span className="text-xs font-semibold tracking-widest text-brand uppercase">
             Who We Are
           </span>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+          <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             A Lagos-based studio held to a global standard.
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-muted">
@@ -584,7 +617,9 @@ function About() {
               key={s.label}
               className="rounded-2xl border border-slate-200 bg-surface p-6 text-center sm:text-left"
             >
-              <div className="text-4xl font-extrabold text-brand">{s.value}</div>
+              <div className="font-display text-4xl font-bold text-brand">
+                {s.value}
+              </div>
               <div className="mt-1 text-sm font-medium text-muted">{s.label}</div>
             </div>
           ))}
@@ -623,7 +658,7 @@ function Contact() {
           <span className="text-xs font-semibold tracking-widest text-brand uppercase">
             Contact
           </span>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+          <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Ready to build something that solves a real problem?
           </h2>
           <p className="mt-6 text-lg text-muted">
@@ -742,10 +777,10 @@ function Footer() {
       <div className="container-max section-padding grid gap-10 md:grid-cols-3">
         <div>
           <a href="#" className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand text-white font-extrabold">
+            <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand font-display text-white font-bold">
               R
             </span>
-            <span className="text-lg font-extrabold tracking-tight">
+            <span className="font-display text-lg font-bold tracking-tight">
               Rollyadams <span className="text-brand">WebStudio</span>
             </span>
           </a>
@@ -809,6 +844,7 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
+        <Manifesto />
         <Services />
         <Portfolio />
         <About />
