@@ -5,10 +5,6 @@ import {
   X,
   ArrowRight,
   CalendarClock,
-  LayoutDashboard,
-  Globe,
-  Smartphone,
-  PenTool,
   ArrowUpRight,
   ChevronDown,
   Mail,
@@ -90,7 +86,7 @@ function Navbar() {
   )
 }
 
-/* ============ HERO ============ */
+/* ============ HERO — annotated workshop wall ============ */
 const heroContainer = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.15 } },
@@ -102,10 +98,30 @@ const heroItem = {
 }
 
 const marqueeShots = [
-  { src: '/images/sg-login.jpg', alt: '' },
-  { src: '/images/careconnect-chat.jpg', alt: '' },
-  { src: '/images/cbs-home.jpg', alt: '' },
-  { src: '/images/attendai-login.jpg', alt: '' },
+  {
+    src: '/images/sg-login.jpg',
+    caption: 'Supreme Gate · live',
+    size: 'h-64 w-96 md:h-80 md:w-[30rem]',
+    tilt: 'rotate-[-1.5deg]',
+  },
+  {
+    src: '/images/careconnect-chat.jpg',
+    caption: 'CareConnect · 24/7',
+    size: 'h-48 w-72 md:h-60 md:w-[22rem]',
+    tilt: 'rotate-[1.5deg]',
+  },
+  {
+    src: '/images/cbs-home.jpg',
+    caption: 'Career Builder Schools · live',
+    size: 'h-64 w-96 md:h-80 md:w-[30rem]',
+    tilt: 'rotate-[1deg]',
+  },
+  {
+    src: '/images/attendai-login.jpg',
+    caption: 'AttendAI · live',
+    size: 'h-48 w-72 md:h-60 md:w-[22rem]',
+    tilt: 'rotate-[-1deg]',
+  },
 ]
 
 function Hero() {
@@ -113,21 +129,26 @@ function Hero() {
 
   return (
     <section className="relative overflow-hidden pt-36 pb-48 section-padding">
-      {/* Tilted exhibit shelf — your shipped work, composed on purpose */}
+      {/* Workshop wall — pinned prints, annotated */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-[58%] rotate-[-2deg] scale-105"
+        className="pointer-events-none absolute inset-x-0 top-[58%] rotate-[-1deg] scale-105"
       >
         <div className="marquee">
-          <div className="marquee-track">
+          <div className="marquee-track items-center">
             {loop.map((shot, i) => (
-              <img
-                key={i}
-                src={shot.src}
-                alt={shot.alt}
-                loading="lazy"
-                className="mr-6 h-56 w-80 md:h-72 md:w-[26rem] rounded-2xl object-cover shadow-xl border border-slate-200"
-              />
+              <div key={i} className={`relative mr-8 ${shot.size} ${shot.tilt}`}>
+                <img
+                  src={shot.src}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full rounded-2xl object-cover shadow-xl border border-slate-200"
+                />
+                <span className="absolute -bottom-3 left-4 inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-semibold text-muted shadow-sm">
+                  <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  {shot.caption}
+                </span>
+              </div>
             ))}
           </div>
         </div>
@@ -286,25 +307,21 @@ function ShotFrame({ item, phoneClass, browserClass }) {
   )
 }
 
-/* ============ SERVICES ============ */
+/* ============ SERVICES — index list, no boxes ============ */
 const services = [
   {
-    icon: LayoutDashboard,
     title: 'Web App & Dashboard Design',
     desc: 'Complex SaaS platforms and data-rich dashboards built for clarity and control.',
   },
   {
-    icon: Globe,
     title: 'Corporate & NGO Websites',
     desc: 'High-converting, trust-building websites for established brands and organisations.',
   },
   {
-    icon: Smartphone,
     title: 'Mobile App Design',
     desc: 'Native-feel iOS and Android experiences designed for real-world users.',
   },
   {
-    icon: PenTool,
     title: 'UI/UX Prototyping',
     desc: 'Wireframes and interactive user flows that validate ideas before a line of code.',
   },
@@ -319,7 +336,7 @@ function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-14 text-center"
+          className="mb-10 text-center"
         >
           <span className="text-xs font-semibold tracking-widest text-brand uppercase">
             What We Do
@@ -329,30 +346,35 @@ function Services() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto max-w-4xl">
           {services.map((s, i) => (
             <motion.div
               key={s.title}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group rounded-2xl border border-slate-200 bg-surface p-8 transition-all hover:border-brand/40 hover:shadow-xl hover:shadow-brand/10 hover:-translate-y-1"
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="group grid gap-2 border-t border-slate-200 py-8 md:grid-cols-12 md:items-baseline md:gap-6"
             >
-              <div className="mb-5 grid h-12 w-12 place-items-center rounded-xl bg-brand/10 text-brand transition-colors group-hover:bg-brand group-hover:text-white">
-                <s.icon size={24} />
-              </div>
-              <h3 className="mb-3 text-lg font-bold">{s.title}</h3>
-              <p className="text-sm leading-relaxed text-muted">{s.desc}</p>
+              <span className="font-display text-sm font-bold text-brand md:col-span-1">
+                0{i + 1}
+              </span>
+              <h3 className="font-display text-xl font-bold transition-colors group-hover:text-brand md:col-span-4">
+                {s.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-muted md:col-span-7">
+                {s.desc}
+              </p>
             </motion.div>
           ))}
+          <div className="border-t border-slate-200" />
         </div>
       </div>
     </section>
   )
 }
 
-/* ============ PORTFOLIO ============ */
+/* ============ PORTFOLIO — frames float free, no card boxes ============ */
 const featured = [
   {
     tag: 'SaaS Platform',
@@ -480,8 +502,8 @@ function Portfolio() {
           </h2>
         </motion.div>
 
-        {/* Featured 3 — devices floating alone on white */}
-        <div className="grid gap-8 md:grid-cols-3">
+        {/* Featured 3 — floating free */}
+        <div className="grid gap-12 md:grid-cols-3 md:gap-8">
           {featured.map((p, i) => (
             <motion.a
               key={p.title}
@@ -492,26 +514,26 @@ function Portfolio() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-2xl hover:-translate-y-1 overflow-hidden"
+              className="group block"
             >
-              <div className="relative grid h-72 place-items-center px-6">
+              <div className="relative grid h-72 place-items-center">
                 <div className="absolute h-36 w-36 rounded-full bg-brand/10 blur-3xl" />
                 <ShotFrame
                   item={p}
-                  phoneClass="relative h-60 aspect-[9/16] transition-transform duration-500 group-hover:scale-105"
-                  browserClass="relative h-52 w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                  phoneClass="relative h-60 aspect-[9/16] transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02]"
+                  browserClass="relative h-52 w-full transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.01]"
                 />
-                <span className="absolute top-4 left-4 rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                <span className="absolute top-0 left-0 rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
                   {p.tag}
                 </span>
               </div>
 
-              <div className="p-6">
-                <h3 className="font-display text-lg font-bold group-hover:text-brand transition-colors">
+              <div className="mt-6">
+                <h3 className="font-display text-lg font-bold transition-colors group-hover:text-brand">
                   {p.title}
                 </h3>
                 <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
-                <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand">
+                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand">
                   View Live <ArrowUpRight size={16} />
                 </span>
               </div>
@@ -520,7 +542,7 @@ function Portfolio() {
         </div>
 
         {/* View more toggle */}
-        <div className="mt-12 text-center">
+        <div className="mt-16 text-center">
           <button
             onClick={() => setShowMore(!showMore)}
             className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-ink transition-all hover:border-brand hover:text-brand"
@@ -533,27 +555,24 @@ function Portfolio() {
           </button>
         </div>
 
-        {/* Archive grid — appears on demand */}
+        {/* Archive — floating free */}
         {showMore && (
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8"
           >
             {archive.map((p) => (
-              <div
-                key={p.title}
-                className="group rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
-              >
-                <div className="relative grid h-52 place-items-center px-4">
+              <div key={p.title} className="group">
+                <div className="relative grid h-52 place-items-center">
                   <ShotFrame
                     item={p}
-                    phoneClass="h-40 aspect-[9/16] transition-transform duration-500 group-hover:scale-105"
-                    browserClass="h-36 w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                    phoneClass="h-40 aspect-[9/16] transition-transform duration-500 group-hover:-translate-y-1.5"
+                    browserClass="h-36 w-full transition-transform duration-500 group-hover:-translate-y-1.5"
                   />
                 </div>
-                <div className="p-5">
+                <div className="mt-4">
                   <span className="text-[11px] font-semibold tracking-widest text-brand uppercase">
                     {p.tag}
                   </span>
@@ -569,11 +588,11 @@ function Portfolio() {
   )
 }
 
-/* ============ ABOUT ============ */
+/* ============ ABOUT — family voice, typographic stats ============ */
 const stats = [
-  { value: '9+', label: 'Live products shipped' },
-  { value: '24h', label: 'Average response time' },
-  { value: '100%', label: 'Design & build in-house' },
+  { value: '9', label: 'live products' },
+  { value: '0', label: 'abandoned launches' },
+  { value: '1', label: 'family name on every launch' },
 ]
 
 function About() {
@@ -590,7 +609,7 @@ function About() {
             Who We Are
           </span>
           <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-            A Lagos-based studio held to a global standard.
+            Software is a family business here.
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-muted">
             Rollyadams WebStudio is the digital design arm of the Rollyadams
@@ -610,17 +629,16 @@ function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="grid gap-6 sm:grid-cols-3 lg:grid-cols-1"
+          className="flex flex-wrap items-end gap-x-12 gap-y-8 border-t border-slate-200 pt-10"
         >
           {stats.map((s) => (
-            <div
-              key={s.label}
-              className="rounded-2xl border border-slate-200 bg-surface p-6 text-center sm:text-left"
-            >
-              <div className="font-display text-4xl font-bold text-brand">
+            <div key={s.label}>
+              <div className="font-display text-5xl font-bold text-ink">
                 {s.value}
               </div>
-              <div className="mt-1 text-sm font-medium text-muted">{s.label}</div>
+              <div className="mt-2 max-w-[10rem] text-sm leading-snug text-muted">
+                {s.label}
+              </div>
             </div>
           ))}
         </motion.div>
