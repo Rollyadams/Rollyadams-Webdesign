@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useRef, useEffect } from 'react'
+import { motion, useInView, useMotionValue, useSpring } from 'framer-motion'
 import {
   Menu,
   X,
@@ -10,6 +10,31 @@ import {
   Mail,
   Send,
 } from 'lucide-react'
+
+/* ============ COUNTER ANIMATION ============ */
+function StatNumber({ to }) {
+  const ref = useRef(null)
+  const motionValue = useMotionValue(0)
+  const springValue = useSpring(motionValue, { damping: 30, stiffness: 80 })
+  const isInView = useInView(ref, { once: true, margin: "-50px" })
+
+  useEffect(() => {
+    if (isInView) {
+      motionValue.set(to)
+    }
+  }, [motionValue, isInView, to])
+
+  useEffect(() => {
+    const unsubscribe = springValue.on("change", (latest) => {
+      if (ref.current) {
+        ref.current.textContent = Math.round(latest)
+      }
+    })
+    return unsubscribe
+  }, [springValue])
+
+  return <span ref={ref}>0</span>
+}
 
 /* ============ NAVBAR ============ */
 const navLinks = [
@@ -101,25 +126,25 @@ const marqueeShots = [
   {
     src: '/images/sg-login.jpg',
     caption: 'Supreme Gate · live',
-    size: 'h-64 w-96 md:h-80 md:w-[30rem]',
+    size: 'h-40 w-64 md:h-80 md:w-[30rem]',
     tilt: 'rotate-[-1.5deg]',
   },
   {
     src: '/images/careconnect-chat.jpg',
     caption: 'CareConnect · 24/7',
-    size: 'h-48 w-72 md:h-60 md:w-[22rem]',
+    size: 'h-32 w-52 md:h-60 md:w-[22rem]',
     tilt: 'rotate-[1.5deg]',
   },
   {
     src: '/images/cbs-home.jpg',
     caption: 'Career Builder Schools · live',
-    size: 'h-64 w-96 md:h-80 md:w-[30rem]',
+    size: 'h-40 w-64 md:h-80 md:w-[30rem]',
     tilt: 'rotate-[1deg]',
   },
   {
     src: '/images/attendai-login.jpg',
     caption: 'AttendAI · live',
-    size: 'h-48 w-72 md:h-60 md:w-[22rem]',
+    size: 'h-32 w-52 md:h-60 md:w-[22rem]',
     tilt: 'rotate-[-1deg]',
   },
 ]
@@ -128,11 +153,11 @@ function Hero() {
   const loop = [...marqueeShots, ...marqueeShots]
 
   return (
-    <section className="relative overflow-hidden pt-36 pb-48 section-padding">
+    <section className="relative overflow-hidden pt-40 pb-72 md:pt-44 md:pb-52 section-padding">
       {/* Workshop wall — pinned prints, annotated */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-[58%] rotate-[-1deg] scale-105"
+        className="pointer-events-none absolute inset-x-0 top-[68%] md:top-[58%] rotate-[-1deg] scale-105"
       >
         <div className="marquee">
           <div className="marquee-track items-center">
@@ -184,7 +209,7 @@ function Hero() {
 
         <motion.p
           variants={heroItem}
-          className="mt-6 max-w-2xl text-lg text-muted md:text-xl"
+          className="mt-8 max-w-2xl text-lg text-muted md:text-xl"
         >
           Election intelligence platforms. School management systems. AI
           content tools. Support portals. Nine-plus live products — designed
@@ -193,7 +218,7 @@ function Hero() {
 
         <motion.div
           variants={heroItem}
-          className="mt-10 flex flex-col gap-4 sm:flex-row"
+          className="mt-12 flex flex-col gap-4 sm:flex-row"
         >
           <a
             href="#work"
@@ -588,11 +613,11 @@ function Portfolio() {
   )
 }
 
-/* ============ ABOUT — family voice, typographic stats ============ */
+/* ============ ABOUT — family voice, counting stats ============ */
 const stats = [
-  { value: '9', label: 'live products' },
-  { value: '0', label: 'abandoned launches' },
-  { value: '1', label: 'family name on every launch' },
+  { value: 9, label: 'live products' },
+  { value: 0, label: 'abandoned launches' },
+  { value: 1, label: 'family name on every launch' },
 ]
 
 function About() {
@@ -634,7 +659,7 @@ function About() {
           {stats.map((s) => (
             <div key={s.label}>
               <div className="font-display text-5xl font-bold text-ink">
-                {s.value}
+                <StatNumber to={s.value} />
               </div>
               <div className="mt-2 max-w-[10rem] text-sm leading-snug text-muted">
                 {s.label}
