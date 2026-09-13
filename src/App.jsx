@@ -10,6 +10,7 @@ import {
   Smartphone,
   PenTool,
   ArrowUpRight,
+  ChevronDown,
   Mail,
   Send,
 } from 'lucide-react'
@@ -89,7 +90,7 @@ function Navbar() {
   )
 }
 
-/* ============ HERO (with marquee BEHIND the text) ============ */
+/* ============ HERO — sharp marquee behind, light-pool for text ============ */
 const heroContainer = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.15 } },
@@ -112,10 +113,10 @@ function Hero() {
 
   return (
     <section className="relative overflow-hidden pt-36 pb-28 section-padding">
-      {/* Scrolling work samples — background layer */}
+      {/* Scrolling work samples — FULL sharpness */}
       <div
         aria-hidden
-        className="marquee pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-25"
+        className="marquee pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2"
       >
         <div className="marquee-track">
           {loop.map((shot, i) => (
@@ -124,16 +125,18 @@ function Hero() {
               src={shot.src}
               alt={shot.alt}
               loading="lazy"
-              className="mr-6 h-56 w-80 md:h-72 md:w-[26rem] rounded-2xl object-cover"
+              className="mr-6 h-60 w-80 md:h-80 md:w-[28rem] rounded-2xl object-cover shadow-xl border border-slate-200"
             />
           ))}
         </div>
       </div>
 
-      {/* Soft fades so the headline stays king */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-surface via-surface/50 to-surface" />
+      {/* Radial light-pool so the headline stays perfectly readable */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_62%_58%_at_50%_45%,rgba(248,250,252,0.97),rgba(248,250,252,0.85)_45%,rgba(248,250,252,0)_80%)]" />
       <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-surface to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-surface to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-surface to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-surface to-transparent" />
 
       <motion.div
         variants={heroContainer}
@@ -143,7 +146,7 @@ function Hero() {
       >
         <motion.span
           variants={heroItem}
-          className="mb-6 rounded-full border border-brand/20 bg-brand/10 px-4 py-1.5 text-xs font-semibold tracking-widest text-brand uppercase"
+          className="mb-6 rounded-full border border-brand/20 bg-white/80 px-4 py-1.5 text-xs font-semibold tracking-widest text-brand uppercase backdrop-blur"
         >
           Digital Product Studio
         </motion.span>
@@ -186,12 +189,13 @@ function Hero() {
   )
 }
 
-/* ============ PHONE MOCKUP (neat, consistent framing) ============ */
-function PhoneShot({ src, alt, pos, className }) {
+/* ============ DEVICE FRAMES ============ */
+function PhoneFrame({ src, alt, pos, className }) {
   return (
     <div
-      className={`relative overflow-hidden rounded-[1.4rem] border border-slate-200/70 bg-white shadow-2xl ${className}`}
+      className={`relative overflow-hidden rounded-[1.6rem] border-[6px] border-slate-900 bg-white shadow-2xl ${className}`}
     >
+      <div className="absolute top-1.5 left-1/2 -translate-x-1/2 h-3 w-16 rounded-full bg-slate-900 z-10" />
       <img
         src={src}
         alt={alt}
@@ -199,6 +203,53 @@ function PhoneShot({ src, alt, pos, className }) {
         className={`absolute inset-0 h-full w-full object-cover ${pos}`}
       />
     </div>
+  )
+}
+
+function BrowserFrame({ label, src, alt, pos, className }) {
+  return (
+    <div
+      className={`flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl ${className}`}
+    >
+      <div className="flex items-center gap-1.5 border-b border-slate-100 bg-slate-50 px-3 py-2">
+        <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+        <span className="ml-2 flex-1 truncate rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[10px] text-slate-400">
+          {label}
+        </span>
+      </div>
+      <div className="relative flex-1 overflow-hidden">
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className={`absolute inset-0 h-full w-full object-cover ${pos}`}
+        />
+      </div>
+    </div>
+  )
+}
+
+function ShotFrame({ item, className, phoneClass, browserClass }) {
+  if (item.frame === 'phone') {
+    return (
+      <PhoneFrame
+        src={item.img}
+        alt={item.title}
+        pos={item.pos}
+        className={phoneClass}
+      />
+    )
+  }
+  return (
+    <BrowserFrame
+      label={item.label}
+      src={item.img}
+      alt={item.title}
+      pos={item.pos}
+      className={browserClass}
+    />
   )
 }
 
@@ -274,50 +325,58 @@ const featured = [
     tag: 'SaaS Platform',
     title: 'Supreme Gate',
     subtitle: 'Election Intelligence SaaS Platform',
+    frame: 'browser',
+    label: 'supremegate.com.ng',
     img: '/images/sg-home.jpg',
-    pos: 'object-top',
-    bg: 'from-slate-900 to-emerald-900',
+    pos: 'object-[50%_32%]',
     link: 'https://www.supremegate.com.ng',
   },
   {
     tag: 'Corporate / NGO',
     title: 'Career Builder Schools',
     subtitle: 'Institutional Website & Admissions Platform',
+    frame: 'browser',
+    label: 'Career Builder Schools',
     img: '/images/cbs-home.jpg',
-    pos: 'object-top',
-    bg: 'from-slate-900 to-blue-900',
+    pos: 'object-[50%_30%]',
     link: '#',
   },
   {
     tag: 'Web App',
     title: 'HHF CareConnect',
     subtitle: 'Support Web App & Admin Workspace',
+    frame: 'phone',
     img: '/images/careconnect-chat.jpg',
     pos: 'object-[50%_28%]',
-    bg: 'from-blue-900 to-emerald-800',
     link: 'https://chat.hhfoundation.com.ng',
   },
 ]
 
-const moreWork = [
+const archive = [
   {
     tag: 'AI / SaaS',
     title: 'AttendAI',
     subtitle: 'AI-powered workforce attendance',
+    frame: 'browser',
+    label: 'AttendAI',
     img: '/images/attendai-login.jpg',
-    pos: 'object-center',
+    pos: 'object-[50%_45%]',
   },
   {
     tag: 'EdTech',
     title: 'School Resource Center',
     subtitle: 'School management platform',
+    frame: 'browser',
+    label: 'School Resource Center',
     img: '/images/src-login.jpg',
-    pos: 'object-center',
+    pos: 'object-[50%_35%]',
   },
   {
     tag: 'AI Tools',
     title: 'ReelLoader',
     subtitle: 'AI content engine for creators',
+    frame: 'browser',
+    label: 'reel-loader.vercel.app',
     img: '/images/reelloader.jpg',
     pos: 'object-top',
   },
@@ -325,6 +384,8 @@ const moreWork = [
     tag: 'AI / Creative',
     title: 'Moremi Ajasoro',
     subtitle: 'AI showrunner · QwenCloud Hackathon 2026',
+    frame: 'browser',
+    label: 'moremi-showrunner.vercel.app',
     img: '/images/moremi.jpg',
     pos: 'object-top',
   },
@@ -332,6 +393,8 @@ const moreWork = [
     tag: 'Dashboard',
     title: 'HHF Admin Workspace',
     subtitle: 'Secure staff workspace & case management',
+    frame: 'browser',
+    label: 'admin.hhfoundation.com.ng',
     img: '/images/hhf-dashboard.jpg',
     pos: 'object-center',
   },
@@ -339,6 +402,7 @@ const moreWork = [
     tag: 'Mobile Web App',
     title: 'Supreme Gate Agent App',
     subtitle: 'Field operations app for ward agents',
+    frame: 'phone',
     img: '/images/sg-agent.jpg',
     pos: 'object-top',
   },
@@ -346,6 +410,8 @@ const moreWork = [
     tag: 'Web Content',
     title: 'CBS Campus Gallery',
     subtitle: 'Photo & video experience for schools',
+    frame: 'browser',
+    label: 'Career Builder Schools',
     img: '/images/cbs-gallery.jpg',
     pos: 'object-top',
   },
@@ -353,12 +419,16 @@ const moreWork = [
     tag: 'Dashboard',
     title: 'SRC Overview Dashboard',
     subtitle: 'School analytics at a glance',
+    frame: 'browser',
+    label: 'School Resource Center',
     img: '/images/src-dashboard.jpg',
     pos: 'object-top',
   },
 ]
 
 function Portfolio() {
+  const [showMore, setShowMore] = useState(false)
+
   return (
     <section id="work" className="section-padding">
       <div className="container-max">
@@ -377,7 +447,7 @@ function Portfolio() {
           </h2>
         </motion.div>
 
-        {/* Featured 3 — phone mockups on tinted backdrops */}
+        {/* Featured 3 — devices floating alone on white */}
         <div className="grid gap-8 md:grid-cols-3">
           {featured.map((p, i) => (
             <motion.a
@@ -389,18 +459,16 @@ function Portfolio() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-2xl hover:-translate-y-1"
+              className="group rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-2xl hover:-translate-y-1 overflow-hidden"
             >
-              <div
-                className={`relative grid h-72 place-items-center bg-gradient-to-br ${p.bg}`}
-              >
-                <PhoneShot
-                  src={p.img}
-                  alt={p.title}
-                  pos={p.pos}
-                  className="h-56 aspect-[9/16] transition-transform duration-500 group-hover:scale-105"
+              <div className="relative grid h-72 place-items-center px-6">
+                <div className="absolute h-36 w-36 rounded-full bg-brand/10 blur-3xl" />
+                <ShotFrame
+                  item={p}
+                  phoneClass="relative h-60 aspect-[9/16] transition-transform duration-500 group-hover:scale-105"
+                  browserClass="relative h-52 w-full transition-transform duration-500 group-hover:scale-[1.03]"
                 />
-                <span className="absolute top-4 left-4 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+                <span className="absolute top-4 left-4 rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
                   {p.tag}
                 </span>
               </div>
@@ -418,35 +486,51 @@ function Portfolio() {
           ))}
         </div>
 
-        {/* More work grid (8) — same neat phone framing */}
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {moreWork.map((p, i) => (
-            <motion.div
-              key={p.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-xl hover:-translate-y-1"
-            >
-              <div className="grid h-56 place-items-center bg-slate-100">
-                <PhoneShot
-                  src={p.img}
-                  alt={p.title}
-                  pos={p.pos}
-                  className="h-44 aspect-[9/16] transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-5">
-                <span className="text-[11px] font-semibold tracking-widest text-brand uppercase">
-                  {p.tag}
-                </span>
-                <h4 className="mt-1 font-bold">{p.title}</h4>
-                <p className="mt-1 text-xs text-muted">{p.subtitle}</p>
-              </div>
-            </motion.div>
-          ))}
+        {/* View more toggle */}
+        <div className="mt-12 text-center">
+          <button
+            onClick={() => setShowMore(!showMore)}
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-ink transition-all hover:border-brand hover:text-brand"
+          >
+            {showMore ? 'Show fewer projects' : 'View more projects'}
+            <ChevronDown
+              size={16}
+              className={`transition-transform duration-300 ${showMore ? 'rotate-180' : ''}`}
+            />
+          </button>
         </div>
+
+        {/* Archive grid — appears on demand */}
+        {showMore && (
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {archive.map((p) => (
+              <div
+                key={p.title}
+                className="group rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+              >
+                <div className="relative grid h-52 place-items-center px-4">
+                  <ShotFrame
+                    item={p}
+                    phoneClass="h-40 aspect-[9/16] transition-transform duration-500 group-hover:scale-105"
+                    browserClass="h-36 w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                </div>
+                <div className="p-5">
+                  <span className="text-[11px] font-semibold tracking-widest text-brand uppercase">
+                    {p.tag}
+                  </span>
+                  <h4 className="mt-1 font-bold">{p.title}</h4>
+                  <p className="mt-1 text-xs text-muted">{p.subtitle}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   )
@@ -454,7 +538,7 @@ function Portfolio() {
 
 /* ============ ABOUT ============ */
 const stats = [
-  { value: '4+', label: 'Live platforms shipped' },
+  { value: '9+', label: 'Live products shipped' },
   { value: '24h', label: 'Average response time' },
   { value: '100%', label: 'Design & build in-house' },
 ]
