@@ -25,3 +25,23 @@
     @apply max-w-6xl mx-auto;
   }
 }
+
+/* ---- Work marquee: infinite right-to-left scroll ---- */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
