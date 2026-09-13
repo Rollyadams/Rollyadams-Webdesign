@@ -89,7 +89,7 @@ function Navbar() {
   )
 }
 
-/* ============ HERO ============ */
+/* ============ HERO (with marquee BEHIND the text) ============ */
 const heroContainer = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.15 } },
@@ -100,16 +100,46 @@ const heroItem = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
 }
 
+const marqueeShots = [
+  { src: '/images/sg-login.jpg', alt: '' },
+  { src: '/images/careconnect-chat.jpg', alt: '' },
+  { src: '/images/cbs-home.jpg', alt: '' },
+  { src: '/images/attendai-login.jpg', alt: '' },
+]
+
 function Hero() {
+  const loop = [...marqueeShots, ...marqueeShots]
+
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 section-padding">
-      <div className="pointer-events-none absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
+    <section className="relative overflow-hidden pt-36 pb-28 section-padding">
+      {/* Scrolling work samples — background layer */}
+      <div
+        aria-hidden
+        className="marquee pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-25"
+      >
+        <div className="marquee-track">
+          {loop.map((shot, i) => (
+            <img
+              key={i}
+              src={shot.src}
+              alt={shot.alt}
+              loading="lazy"
+              className="mr-6 h-56 w-80 md:h-72 md:w-[26rem] rounded-2xl object-cover"
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Soft fades so the headline stays king */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-surface via-surface/50 to-surface" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-surface to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-surface to-transparent" />
 
       <motion.div
         variants={heroContainer}
         initial="hidden"
         animate="show"
-        className="container-max relative flex flex-col items-center text-center"
+        className="container-max relative z-10 flex flex-col items-center text-center"
       >
         <motion.span
           variants={heroItem}
@@ -156,38 +186,19 @@ function Hero() {
   )
 }
 
-/* ============ WORK MARQUEE (right-to-left) ============ */
-const marqueeShots = [
-  { src: '/images/sg-login.jpg', alt: 'Supreme Gate login screen' },
-  { src: '/images/careconnect-chat.jpg', alt: 'HHF CareConnect chat app' },
-  { src: '/images/cbs-home.jpg', alt: 'Career Builder Schools website' },
-  { src: '/images/attendai-login.jpg', alt: 'AttendAI login screen' },
-]
-
-function WorkMarquee() {
-  const loop = [...marqueeShots, ...marqueeShots]
-
+/* ============ PHONE MOCKUP (neat, consistent framing) ============ */
+function PhoneShot({ src, alt, pos, className }) {
   return (
-    <section
-      className="marquee relative overflow-hidden py-10 bg-white border-y border-slate-200"
-      aria-label="Scrolling work samples"
+    <div
+      className={`relative overflow-hidden rounded-[1.4rem] border border-slate-200/70 bg-white shadow-2xl ${className}`}
     >
-      <div className="marquee-track">
-        {loop.map((shot, i) => (
-          <img
-            key={i}
-            src={shot.src}
-            alt={shot.alt}
-            loading="lazy"
-            className="mr-6 h-44 w-72 md:h-64 md:w-[26rem] rounded-2xl object-cover shadow-lg border border-slate-200"
-          />
-        ))}
-      </div>
-
-      {/* soft edge fades */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
-    </section>
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        className={`absolute inset-0 h-full w-full object-cover ${pos}`}
+      />
+    </div>
   )
 }
 
@@ -264,7 +275,8 @@ const featured = [
     title: 'Supreme Gate',
     subtitle: 'Election Intelligence SaaS Platform',
     img: '/images/sg-home.jpg',
-    pos: 'object-center',
+    pos: 'object-top',
+    bg: 'from-slate-900 to-emerald-900',
     link: 'https://www.supremegate.com.ng',
   },
   {
@@ -272,7 +284,8 @@ const featured = [
     title: 'Career Builder Schools',
     subtitle: 'Institutional Website & Admissions Platform',
     img: '/images/cbs-home.jpg',
-    pos: 'object-center',
+    pos: 'object-top',
+    bg: 'from-slate-900 to-blue-900',
     link: '#',
   },
   {
@@ -280,7 +293,8 @@ const featured = [
     title: 'HHF CareConnect',
     subtitle: 'Support Web App & Admin Workspace',
     img: '/images/careconnect-chat.jpg',
-    pos: 'object-top',
+    pos: 'object-[50%_28%]',
+    bg: 'from-blue-900 to-emerald-800',
     link: 'https://chat.hhfoundation.com.ng',
   },
 ]
@@ -291,48 +305,56 @@ const moreWork = [
     title: 'AttendAI',
     subtitle: 'AI-powered workforce attendance',
     img: '/images/attendai-login.jpg',
+    pos: 'object-center',
   },
   {
     tag: 'EdTech',
     title: 'School Resource Center',
     subtitle: 'School management platform',
     img: '/images/src-login.jpg',
+    pos: 'object-center',
   },
   {
     tag: 'AI Tools',
     title: 'ReelLoader',
     subtitle: 'AI content engine for creators',
     img: '/images/reelloader.jpg',
+    pos: 'object-top',
   },
   {
     tag: 'AI / Creative',
     title: 'Moremi Ajasoro',
     subtitle: 'AI showrunner · QwenCloud Hackathon 2026',
     img: '/images/moremi.jpg',
+    pos: 'object-top',
   },
   {
     tag: 'Dashboard',
     title: 'HHF Admin Workspace',
-    subtitle: 'Case & appointment management dashboard',
+    subtitle: 'Secure staff workspace & case management',
     img: '/images/hhf-dashboard.jpg',
+    pos: 'object-center',
   },
   {
     tag: 'Mobile Web App',
     title: 'Supreme Gate Agent App',
     subtitle: 'Field operations app for ward agents',
     img: '/images/sg-agent.jpg',
+    pos: 'object-top',
   },
   {
     tag: 'Web Content',
     title: 'CBS Campus Gallery',
     subtitle: 'Photo & video experience for schools',
     img: '/images/cbs-gallery.jpg',
+    pos: 'object-top',
   },
   {
     tag: 'Dashboard',
     title: 'SRC Overview Dashboard',
     subtitle: 'School analytics at a glance',
     img: '/images/src-dashboard.jpg',
+    pos: 'object-top',
   },
 ]
 
@@ -355,7 +377,7 @@ function Portfolio() {
           </h2>
         </motion.div>
 
-        {/* Featured 3 */}
+        {/* Featured 3 — phone mockups on tinted backdrops */}
         <div className="grid gap-8 md:grid-cols-3">
           {featured.map((p, i) => (
             <motion.a
@@ -369,14 +391,16 @@ function Portfolio() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-2xl hover:-translate-y-1"
             >
-              <div className="relative h-44 overflow-hidden">
-                <img
+              <div
+                className={`relative grid h-72 place-items-center bg-gradient-to-br ${p.bg}`}
+              >
+                <PhoneShot
                   src={p.img}
                   alt={p.title}
-                  loading="lazy"
-                  className={`h-full w-full object-cover ${p.pos} transition-transform duration-500 group-hover:scale-105`}
+                  pos={p.pos}
+                  className="h-56 aspect-[9/16] transition-transform duration-500 group-hover:scale-105"
                 />
-                <span className="absolute top-4 left-4 rounded-full bg-black/40 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
+                <span className="absolute top-4 left-4 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
                   {p.tag}
                 </span>
               </div>
@@ -394,7 +418,7 @@ function Portfolio() {
           ))}
         </div>
 
-        {/* More work grid (8) */}
+        {/* More work grid (8) — same neat phone framing */}
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {moreWork.map((p, i) => (
             <motion.div
@@ -405,12 +429,12 @@ function Portfolio() {
               transition={{ duration: 0.5, delay: i * 0.05 }}
               className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-xl hover:-translate-y-1"
             >
-              <div className="h-40 overflow-hidden">
-                <img
+              <div className="grid h-56 place-items-center bg-slate-100">
+                <PhoneShot
                   src={p.img}
                   alt={p.title}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  pos={p.pos}
+                  className="h-44 aspect-[9/16] transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
               <div className="p-5">
@@ -701,7 +725,6 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
-        <WorkMarquee />
         <Services />
         <Portfolio />
         <About />
