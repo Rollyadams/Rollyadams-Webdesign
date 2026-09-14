@@ -19,7 +19,7 @@ export default {
         },
         moss: '#2F5B47',
         line: '#DCD5C2',
-        muted: '#6B6455',
+        muted: '#57503F',
       },
     },
   },
