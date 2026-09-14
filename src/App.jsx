@@ -126,25 +126,25 @@ const marqueeShots = [
   {
     src: '/images/sg-login.jpg',
     caption: 'Supreme Gate, live',
-    size: 'h-40 w-64 md:h-80 md:w-[30rem]',
+    size: 'h-44 md:h-72',
     tilt: 'rotate-[-1.5deg]',
   },
   {
     src: '/images/careconnect-chat.jpg',
     caption: 'CareConnect, 24/7',
-    size: 'h-32 w-52 md:h-60 md:w-[22rem]',
+    size: 'h-36 md:h-56',
     tilt: 'rotate-[1.5deg]',
   },
   {
     src: '/images/cbs-home.jpg',
     caption: 'Career Builder Schools, live',
-    size: 'h-40 w-64 md:h-80 md:w-[30rem]',
+    size: 'h-44 md:h-72',
     tilt: 'rotate-[1deg]',
   },
   {
     src: '/images/attendai-login.jpg',
     caption: 'AttendAI, live',
-    size: 'h-32 w-52 md:h-60 md:w-[22rem]',
+    size: 'h-36 md:h-56',
     tilt: 'rotate-[-1deg]',
   },
 ]
@@ -162,12 +162,12 @@ function Hero() {
         <div className="marquee">
           <div className="marquee-track items-center">
             {loop.map((shot, i) => (
-              <div key={i} className={`relative mr-8 ${shot.size} ${shot.tilt}`}>
+              <div key={i} className={`relative mr-8 aspect-[9/19] ${shot.size} ${shot.tilt}`}>
                 <img
                   src={shot.src}
                   alt=""
                   loading="lazy"
-                  className="h-full w-full rounded-2xl object-cover shadow-xl border border-line"
+                  className="h-full w-full rounded-2xl object-cover object-top shadow-xl border border-line"
                 />
                 <span className="absolute -bottom-3 left-4 inline-flex items-center rounded-full border border-line bg-white px-3 py-1 text-[10px] font-semibold text-muted shadow-sm">
                   <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -196,7 +196,7 @@ function Hero() {
           variants={heroItem}
           className="mb-6 rounded-full border border-gold/30 bg-white/80 px-4 py-1.5 text-sm font-medium text-ink/80 backdrop-blur"
         >
-          9 products shipped, 0 abandoned
+          Built for Supreme Gate, Career Builder Schools & Hosanna Help Foundation
         </motion.span>
 
         <motion.h1
@@ -239,6 +239,28 @@ function Hero() {
 }
 
 /* ============ MANIFESTO ============ */
+/* ============ TRUST STRIP — real names, not logos we don't have yet ============ */
+function TrustStrip() {
+  const names = [
+    'Supreme Gate',
+    'Career Builder Schools',
+    'Hosanna Help Foundation',
+    'School Resource Center',
+    'AttendAI',
+  ]
+  return (
+    <div className="border-y border-line bg-white py-6">
+      <div className="container-max flex flex-wrap items-center justify-center gap-x-10 gap-y-3 px-6">
+        {names.map((n) => (
+          <span key={n} className="font-display text-sm font-semibold text-muted">
+            {n}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function Manifesto() {
   return (
     <section className="bg-ink py-24 md:py-32">
@@ -268,68 +290,25 @@ function Manifesto() {
   )
 }
 
-/* ============ DEVICE FRAMES ============ */
-function PhoneFrame({ src, alt, pos, className }) {
+/* ============ DEVICE FRAME — aspect-locked to the real screenshot, nothing gets cropped ============ */
+function DeviceFrame({ src, alt, className }) {
   return (
     <div
-      className={`relative overflow-hidden rounded-[1.6rem] border-[6px] border-slate-900 bg-white shadow-2xl ${className}`}
+      className={`relative aspect-[9/19] overflow-hidden rounded-[1.4rem] border-[5px] border-ink bg-white shadow-xl ${className}`}
     >
-      <div className="absolute top-1.5 left-1/2 -translate-x-1/2 h-3 w-16 rounded-full bg-slate-900 z-10" />
+      <div className="absolute top-1 left-1/2 -translate-x-1/2 h-2.5 w-14 rounded-full bg-ink z-10" />
       <img
         src={src}
         alt={alt}
         loading="lazy"
-        className={`absolute inset-0 h-full w-full object-cover ${pos}`}
+        className="h-full w-full object-cover object-top"
       />
     </div>
   )
 }
 
-function BrowserFrame({ label, src, alt, pos, className }) {
-  return (
-    <div
-      className={`flex flex-col overflow-hidden rounded-xl border border-line bg-white shadow-2xl ${className}`}
-    >
-      <div className="flex items-center gap-1.5 border-b border-slate-100 bg-slate-50 px-3 py-2">
-        <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-        <span className="ml-2 flex-1 truncate rounded-md border border-line bg-white px-2 py-0.5 text-[10px] text-slate-400">
-          {label}
-        </span>
-      </div>
-      <div className="relative flex-1 overflow-hidden">
-        <img
-          src={src}
-          alt={alt}
-          loading="lazy"
-          className={`absolute inset-0 h-full w-full object-cover ${pos}`}
-        />
-      </div>
-    </div>
-  )
-}
-
-function ShotFrame({ item, phoneClass, browserClass }) {
-  if (item.frame === 'phone') {
-    return (
-      <PhoneFrame
-        src={item.img}
-        alt={item.title}
-        pos={item.pos}
-        className={phoneClass}
-      />
-    )
-  }
-  return (
-    <BrowserFrame
-      label={item.label}
-      src={item.img}
-      alt={item.title}
-      pos={item.pos}
-      className={browserClass}
-    />
-  )
+function ShotFrame({ item, phoneClass }) {
+  return <DeviceFrame src={item.img} alt={item.title} className={phoneClass} />
 }
 
 /* ============ SERVICES — index list, no boxes ============ */
@@ -535,14 +514,13 @@ function Portfolio() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="group block"
             >
-              <div className="relative grid h-72 place-items-center">
+              <div className="relative mx-auto grid w-44 place-items-center sm:w-52">
                 <div className="absolute h-36 w-36 rounded-full bg-gold/10 blur-3xl" />
                 <ShotFrame
                   item={p}
-                  phoneClass="relative h-60 aspect-[9/16] transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02]"
-                  browserClass="relative h-52 w-full transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.01]"
+                  phoneClass="relative w-full transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02]"
                 />
-                <span className="absolute top-0 left-0 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
+                <span className="absolute -top-4 left-0 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
                   {p.tag}
                 </span>
               </div>
@@ -584,11 +562,10 @@ function Portfolio() {
           >
             {archive.map((p) => (
               <div key={p.title} className="group">
-                <div className="relative grid h-52 place-items-center">
+                <div className="relative mx-auto w-32 sm:w-36">
                   <ShotFrame
                     item={p}
-                    phoneClass="h-40 aspect-[9/16] transition-transform duration-500 group-hover:-translate-y-1.5"
-                    browserClass="h-36 w-full transition-transform duration-500 group-hover:-translate-y-1.5"
+                    phoneClass="w-full transition-transform duration-500 group-hover:-translate-y-1.5"
                   />
                 </div>
                 <div className="mt-4">
@@ -609,7 +586,7 @@ function Portfolio() {
 
 /* ============ ABOUT — family voice, counting stats ============ */
 const stats = [
-  { value: 9, label: 'live products' },
+  { value: 9, label: 'live products — election, school & healthcare platforms' },
   { value: 0, label: 'abandoned launches' },
   { value: 1, label: 'family name on every launch' },
 ]
@@ -653,7 +630,7 @@ function About() {
               <div className="font-display text-5xl font-bold text-ink">
                 <StatNumber to={s.value} />
               </div>
-              <div className="mt-2 max-w-[10rem] text-sm leading-snug text-muted">
+              <div className="mt-2 max-w-[13rem] text-sm leading-snug text-muted">
                 {s.label}
               </div>
             </div>
@@ -877,6 +854,7 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
+        <TrustStrip />
         <Manifesto />
         <Services />
         <Portfolio />
