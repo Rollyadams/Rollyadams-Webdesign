@@ -195,8 +195,8 @@ function Hero() {
           className="mt-8 max-w-2xl text-lg text-white/80 md:text-xl"
         >
           Election intelligence platforms. School management systems. AI
-          content tools. Support portals. Nine-plus live products — designed
-          and built in-house from Lagos.
+          content tools. Support portals. Designed and built in-house, end
+          to end.
         </motion.p>
 
         <motion.div
