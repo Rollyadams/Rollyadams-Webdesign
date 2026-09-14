@@ -48,14 +48,14 @@ function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-md border-b border-slate-200">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-paper/80 backdrop-blur-md border-b border-line">
       <nav className="container-max flex items-center justify-between px-6 py-4">
         <a href="#" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand font-display text-white font-bold">
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-gold font-display text-white font-bold">
             R
           </span>
           <span className="font-display text-lg font-bold tracking-tight">
-            Rollyadams <span className="text-brand">WebStudio</span>
+            Rollyadams <span className="text-gold">WebStudio</span>
           </span>
         </a>
 
@@ -71,7 +71,7 @@ function Navbar() {
           ))}
           <a
             href="#contact"
-            className="rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand/30 transition-all hover:bg-brand-dark hover:-translate-y-0.5"
+            className="rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-gold/30 transition-all hover:bg-gold-dark hover:-translate-y-0.5"
           >
             Book a Call
           </a>
@@ -87,7 +87,7 @@ function Navbar() {
       </nav>
 
       {open && (
-        <div className="md:hidden border-t border-slate-200 bg-surface px-6 py-4 flex flex-col gap-4">
+        <div className="md:hidden border-t border-line bg-paper px-6 py-4 flex flex-col gap-4">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -101,7 +101,7 @@ function Navbar() {
           <a
             href="#contact"
             onClick={() => setOpen(false)}
-            className="rounded-lg bg-brand px-5 py-3 text-center text-sm font-semibold text-white"
+            className="rounded-lg bg-gold px-5 py-3 text-center text-sm font-semibold text-white"
           >
             Book a Call
           </a>
@@ -125,25 +125,25 @@ const heroItem = {
 const marqueeShots = [
   {
     src: '/images/sg-login.jpg',
-    caption: 'Supreme Gate · live',
+    caption: 'Supreme Gate, live',
     size: 'h-40 w-64 md:h-80 md:w-[30rem]',
     tilt: 'rotate-[-1.5deg]',
   },
   {
     src: '/images/careconnect-chat.jpg',
-    caption: 'CareConnect · 24/7',
+    caption: 'CareConnect, 24/7',
     size: 'h-32 w-52 md:h-60 md:w-[22rem]',
     tilt: 'rotate-[1.5deg]',
   },
   {
     src: '/images/cbs-home.jpg',
-    caption: 'Career Builder Schools · live',
+    caption: 'Career Builder Schools, live',
     size: 'h-40 w-64 md:h-80 md:w-[30rem]',
     tilt: 'rotate-[1deg]',
   },
   {
     src: '/images/attendai-login.jpg',
-    caption: 'AttendAI · live',
+    caption: 'AttendAI, live',
     size: 'h-32 w-52 md:h-60 md:w-[22rem]',
     tilt: 'rotate-[-1deg]',
   },
@@ -167,9 +167,9 @@ function Hero() {
                   src={shot.src}
                   alt=""
                   loading="lazy"
-                  className="h-full w-full rounded-2xl object-cover shadow-xl border border-slate-200"
+                  className="h-full w-full rounded-2xl object-cover shadow-xl border border-line"
                 />
-                <span className="absolute -bottom-3 left-4 inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-semibold text-muted shadow-sm">
+                <span className="absolute -bottom-3 left-4 inline-flex items-center rounded-full border border-line bg-white px-3 py-1 text-[10px] font-semibold text-muted shadow-sm">
                   <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   {shot.caption}
                 </span>
@@ -177,14 +177,14 @@ function Hero() {
             ))}
           </div>
         </div>
-        <span className="absolute -top-5 left-[6%] rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-semibold text-muted shadow-md">
-          Live from the workshop →
+        <span className="absolute -top-5 left-[6%] rounded-full border border-line bg-white px-4 py-1.5 text-xs font-semibold text-muted shadow-md">
+          Live from the workshop
         </span>
       </div>
 
       {/* Readability pool for the headline */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_62%_52%_at_50%_36%,rgba(248,250,252,0.97),rgba(248,250,252,0.85)_45%,rgba(248,250,252,0)_80%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-surface to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-paper to-transparent" />
 
       <motion.div
         variants={heroContainer}
@@ -194,9 +194,9 @@ function Hero() {
       >
         <motion.span
           variants={heroItem}
-          className="mb-6 rounded-full border border-brand/20 bg-white/80 px-4 py-1.5 text-xs font-semibold tracking-widest text-brand uppercase backdrop-blur"
+          className="mb-6 rounded-full border border-gold/30 bg-white/80 px-4 py-1.5 text-sm font-medium text-ink/80 backdrop-blur"
         >
-          9+ Live Products Shipped
+          9 products shipped, 0 abandoned
         </motion.span>
 
         <motion.h1
@@ -204,7 +204,7 @@ function Hero() {
           className="font-display max-w-4xl text-4xl font-bold leading-tight tracking-tight md:text-6xl"
         >
           We design it. We build it.{' '}
-          <span className="text-brand">It ships.</span>
+          <span className="text-gold">It ships.</span>
         </motion.h1>
 
         <motion.p
@@ -222,13 +222,13 @@ function Hero() {
         >
           <a
             href="#work"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-8 py-4 text-base font-semibold text-white shadow-lg shadow-brand/30 transition-all hover:bg-brand-dark hover:-translate-y-0.5"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-base font-semibold text-white shadow-lg shadow-gold/30 transition-all hover:bg-gold-dark hover:-translate-y-0.5"
           >
             See what we've shipped <ArrowRight size={18} />
           </a>
           <a
             href="#contact"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-8 py-4 text-base font-semibold text-ink transition-all hover:border-ink"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-white px-8 py-4 text-base font-semibold text-ink transition-all hover:border-ink"
           >
             <CalendarClock size={18} /> Talk to a designer
           </a>
@@ -251,7 +251,7 @@ function Manifesto() {
           className="font-display mx-auto max-w-4xl text-3xl font-bold leading-snug tracking-tight text-white md:text-5xl"
         >
           From the idea in your head to the product in your{' '}
-          <span className="text-blue-400">users' hands.</span>
+          <span className="text-gold">users' hands.</span>
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 16 }}
@@ -288,13 +288,13 @@ function PhoneFrame({ src, alt, pos, className }) {
 function BrowserFrame({ label, src, alt, pos, className }) {
   return (
     <div
-      className={`flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl ${className}`}
+      className={`flex flex-col overflow-hidden rounded-xl border border-line bg-white shadow-2xl ${className}`}
     >
       <div className="flex items-center gap-1.5 border-b border-slate-100 bg-slate-50 px-3 py-2">
         <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
         <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-        <span className="ml-2 flex-1 truncate rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[10px] text-slate-400">
+        <span className="ml-2 flex-1 truncate rounded-md border border-line bg-white px-2 py-0.5 text-[10px] text-slate-400">
           {label}
         </span>
       </div>
@@ -363,9 +363,7 @@ function Services() {
           transition={{ duration: 0.6 }}
           className="mb-10 text-center"
         >
-          <span className="text-xs font-semibold tracking-widest text-brand uppercase">
-            What We Do
-          </span>
+          <span className="text-sm font-semibold text-gold">What we do</span>
           <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Services built around your goals
           </h2>
@@ -379,12 +377,10 @@ function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="group grid gap-2 border-t border-slate-200 py-8 md:grid-cols-12 md:items-baseline md:gap-6"
+              className="group grid gap-2 border-t border-line py-8 md:grid-cols-12 md:items-baseline md:gap-6"
             >
-              <span className="font-display text-sm font-bold text-brand md:col-span-1">
-                0{i + 1}
-              </span>
-              <h3 className="font-display text-xl font-bold transition-colors group-hover:text-brand md:col-span-4">
+              <span className="hidden h-px w-8 self-center bg-line md:col-span-1 md:block" />
+              <h3 className="font-display text-xl font-bold transition-colors group-hover:text-gold md:col-span-4">
                 {s.title}
               </h3>
               <p className="text-sm leading-relaxed text-muted md:col-span-7">
@@ -392,7 +388,7 @@ function Services() {
               </p>
             </motion.div>
           ))}
-          <div className="border-t border-slate-200" />
+          <div className="border-t border-line" />
         </div>
       </div>
     </section>
@@ -463,7 +459,7 @@ const archive = [
   {
     tag: 'AI / Creative',
     title: 'Moremi Ajasoro',
-    subtitle: 'AI showrunner · QwenCloud Hackathon 2026',
+    subtitle: 'AI showrunner, QwenCloud Hackathon 2026',
     frame: 'browser',
     label: 'moremi-showrunner.vercel.app',
     img: '/images/moremi.jpg',
@@ -519,9 +515,7 @@ function Portfolio() {
           transition={{ duration: 0.6 }}
           className="mb-14 text-center"
         >
-          <span className="text-xs font-semibold tracking-widest text-brand uppercase">
-            Our Work
-          </span>
+          <span className="text-sm font-semibold text-gold">Selected work</span>
           <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Selected projects
           </h2>
@@ -542,23 +536,23 @@ function Portfolio() {
               className="group block"
             >
               <div className="relative grid h-72 place-items-center">
-                <div className="absolute h-36 w-36 rounded-full bg-brand/10 blur-3xl" />
+                <div className="absolute h-36 w-36 rounded-full bg-gold/10 blur-3xl" />
                 <ShotFrame
                   item={p}
                   phoneClass="relative h-60 aspect-[9/16] transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02]"
                   browserClass="relative h-52 w-full transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.01]"
                 />
-                <span className="absolute top-0 left-0 rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
+                <span className="absolute top-0 left-0 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
                   {p.tag}
                 </span>
               </div>
 
               <div className="mt-6">
-                <h3 className="font-display text-lg font-bold transition-colors group-hover:text-brand">
+                <h3 className="font-display text-lg font-bold transition-colors group-hover:text-gold">
                   {p.title}
                 </h3>
                 <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand">
+                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-gold">
                   View Live <ArrowUpRight size={16} />
                 </span>
               </div>
@@ -570,7 +564,7 @@ function Portfolio() {
         <div className="mt-16 text-center">
           <button
             onClick={() => setShowMore(!showMore)}
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-ink transition-all hover:border-brand hover:text-brand"
+            className="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-6 py-3 text-sm font-semibold text-ink transition-all hover:border-gold hover:text-gold"
           >
             {showMore ? 'Show fewer projects' : 'View more projects'}
             <ChevronDown
@@ -598,7 +592,7 @@ function Portfolio() {
                   />
                 </div>
                 <div className="mt-4">
-                  <span className="text-[11px] font-semibold tracking-widest text-brand uppercase">
+                  <span className="text-[11px] font-semibold text-gold">
                     {p.tag}
                   </span>
                   <h4 className="font-display mt-1 font-bold">{p.title}</h4>
@@ -630,9 +624,7 @@ function About() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-xs font-semibold tracking-widest text-brand uppercase">
-            Who We Are
-          </span>
+          <span className="text-sm font-semibold text-gold">Who we are</span>
           <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Software is a family business here.
           </h2>
@@ -654,7 +646,7 @@ function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="flex flex-wrap items-end gap-x-12 gap-y-8 border-t border-slate-200 pt-10"
+          className="flex flex-wrap items-end gap-x-12 gap-y-8 border-t border-line pt-10"
         >
           {stats.map((s) => (
             <div key={s.label}>
@@ -698,9 +690,7 @@ function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-xs font-semibold tracking-widest text-brand uppercase">
-            Contact
-          </span>
+          <span className="text-sm font-semibold text-gold">Get in touch</span>
           <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Ready to build something that solves a real problem?
           </h2>
@@ -714,7 +704,7 @@ function Contact() {
               href={BOOKING_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-8 py-4 text-base font-semibold text-white shadow-lg shadow-brand/30 transition-all hover:bg-brand-dark hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-base font-semibold text-white shadow-lg shadow-gold/30 transition-all hover:bg-gold-dark hover:-translate-y-0.5"
             >
               <CalendarClock size={18} /> Book a 15-min Discovery Call
             </a>
@@ -733,7 +723,7 @@ function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm"
+          className="rounded-2xl border border-line bg-white p-8 shadow-sm"
         >
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
@@ -745,7 +735,7 @@ function Contact() {
                 name="name"
                 required
                 placeholder="Your name"
-                className="w-full rounded-lg border border-slate-300 bg-surface px-4 py-3 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
+                className="w-full rounded-lg border border-line bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold focus:ring-2 focus:ring-gold/20"
               />
             </div>
             <div>
@@ -758,7 +748,7 @@ function Contact() {
                 type="email"
                 required
                 placeholder="you@company.com"
-                className="w-full rounded-lg border border-slate-300 bg-surface px-4 py-3 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
+                className="w-full rounded-lg border border-line bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold focus:ring-2 focus:ring-gold/20"
               />
             </div>
           </div>
@@ -770,7 +760,7 @@ function Contact() {
             <select
               id="type"
               name="type"
-              className="w-full rounded-lg border border-slate-300 bg-surface px-4 py-3 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
+              className="w-full rounded-lg border border-line bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold focus:ring-2 focus:ring-gold/20"
             >
               <option>Web App & Dashboard</option>
               <option>Corporate / NGO Website</option>
@@ -790,7 +780,7 @@ function Contact() {
               rows="5"
               required
               placeholder="Tell us briefly what you want to build..."
-              className="w-full rounded-lg border border-slate-300 bg-surface px-4 py-3 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20"
+              className="w-full rounded-lg border border-line bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold focus:ring-2 focus:ring-gold/20"
             />
           </div>
 
@@ -820,11 +810,11 @@ function Footer() {
       <div className="container-max section-padding grid gap-10 md:grid-cols-3">
         <div>
           <a href="#" className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand font-display text-white font-bold">
+            <span className="grid h-9 w-9 place-items-center rounded-lg bg-gold font-display text-white font-bold">
               R
             </span>
             <span className="font-display text-lg font-bold tracking-tight">
-              Rollyadams <span className="text-brand">WebStudio</span>
+              Rollyadams <span className="text-gold">WebStudio</span>
             </span>
           </a>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-400">
@@ -834,7 +824,7 @@ function Footer() {
         </div>
 
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-400">
+          <h4 className="text-sm font-semibold text-slate-400">
             Explore
           </h4>
           <ul className="mt-4 space-y-3">
@@ -852,7 +842,7 @@ function Footer() {
         </div>
 
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-400">
+          <h4 className="text-sm font-semibold text-slate-400">
             Get in touch
           </h4>
           <a
@@ -873,7 +863,7 @@ function Footer() {
             © {new Date().getFullYear()} Rollyadams WebStudio. All rights
             reserved.
           </span>
-          <span>Lagos, Nigeria · Working worldwide</span>
+          <span>Lagos, Nigeria</span>
         </div>
       </div>
     </footer>
@@ -883,7 +873,7 @@ function Footer() {
 /* ============ APP ============ */
 export default function App() {
   return (
-    <div className="min-h-screen bg-surface text-ink">
+    <div className="min-h-screen bg-paper text-ink">
       <Navbar />
       <main>
         <Hero />
