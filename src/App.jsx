@@ -239,22 +239,40 @@ function Hero() {
 
 /* ============ MANIFESTO ============ */
 /* ============ TRUST STRIP — real names, not logos we don't have yet ============ */
+const trustLogos = [
+  { src: '/images/logos/supreme-gate.jpg', name: 'Supreme Gate' },
+  { src: '/images/logos/career-builder-schools.jpg', name: 'Career Builder Schools' },
+  { src: '/images/logos/hhf.jpg', name: 'Hosanna Help Foundation' },
+  { src: '/images/logos/src.jpg', name: 'School Resource Center' },
+  { src: '/images/logos/attendai.jpg', name: 'AttendAI' },
+]
+
 function TrustStrip() {
-  const names = [
-    'Supreme Gate',
-    'Career Builder Schools',
-    'Hosanna Help Foundation',
-    'School Resource Center',
-    'AttendAI',
-  ]
+  const loop = [...trustLogos, ...trustLogos]
+
   return (
-    <div className="border-y border-line bg-white py-6">
-      <div className="container-max flex flex-wrap items-center justify-center gap-x-10 gap-y-3 px-6">
-        {names.map((n) => (
-          <span key={n} className="font-display text-base font-semibold text-muted">
-            {n}
-          </span>
-        ))}
+    <div className="border-y border-line bg-white py-8">
+      <div className="marquee overflow-hidden">
+        <div className="marquee-track items-center gap-6 md:gap-10">
+          {loop.map((logo, i) => (
+            <div
+              key={`${logo.src}-${i}`}
+              className="flex w-32 shrink-0 flex-col items-center gap-2 md:w-36"
+            >
+              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl border border-line bg-paper p-2 md:h-24 md:w-24">
+                <img
+                  src={logo.src}
+                  alt={logo.name}
+                  loading="lazy"
+                  className="h-full w-full object-contain"
+                />
+              </div>
+              <span className="text-center text-xs font-medium text-muted">
+                {logo.name}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
