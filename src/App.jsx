@@ -196,7 +196,7 @@ function Hero() {
           variants={heroItem}
           className="mb-6 rounded-full border border-gold/30 bg-white/80 px-4 py-1.5 text-sm font-medium text-ink/80 backdrop-blur"
         >
-          Built for Supreme Gate, Career Builder Schools & Hosanna Help Foundation
+          Product design & engineering, built and shipped in-house
         </motion.span>
 
         <motion.h1
