@@ -150,57 +150,24 @@ const marqueeShots = [
 ]
 
 function Hero() {
-  const loop = [...marqueeShots, ...marqueeShots]
+  const shots = marqueeShots
 
   return (
-    <section className="relative overflow-hidden pt-40 pb-72 md:pt-44 md:pb-52 section-padding">
-      {/* Workshop wall — pinned prints, annotated */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-[68%] md:top-[58%] rotate-[-1deg] scale-105"
-      >
-        <div className="marquee">
-          <div className="marquee-track items-center">
-            {loop.map((shot, i) => (
-              <div key={i} className={`relative mr-8 aspect-[9/19] ${shot.size} ${shot.tilt}`}>
-                <img
-                  src={shot.src}
-                  alt=""
-                  loading="lazy"
-                  className="h-full w-full rounded-2xl object-cover object-top shadow-xl border border-line"
-                />
-                <span className="absolute -bottom-3 left-4 inline-flex items-center rounded-full border border-line bg-white px-3 py-1 text-[10px] font-semibold text-muted shadow-sm">
-                  <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  {shot.caption}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <span className="absolute -top-5 left-[6%] rounded-full border border-line bg-white px-4 py-1.5 text-xs font-semibold text-muted shadow-md">
-          Live from the workshop
-        </span>
-      </div>
-
-      {/* Readability pool for the headline */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_62%_52%_at_50%_36%,rgba(248,250,252,0.97),rgba(248,250,252,0.85)_45%,rgba(248,250,252,0)_80%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-paper to-transparent" />
-
-      <motion.div
-        variants={heroContainer}
-        initial="hidden"
-        animate="show"
-        className="container-max relative z-10 flex flex-col items-center text-center"
-      >
+    <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 section-padding">
+      <div className="container-max relative z-10 flex flex-col items-center text-center">
         <motion.span
           variants={heroItem}
-          className="mb-6 rounded-full border border-gold/30 bg-white/80 px-4 py-1.5 text-sm font-medium text-ink/80 backdrop-blur"
+          initial="hidden"
+          animate="show"
+          className="mb-6 rounded-full border border-gold/30 bg-white/80 px-4 py-1.5 text-sm font-medium text-ink/80"
         >
           Product design & engineering, built and shipped in-house
         </motion.span>
 
         <motion.h1
           variants={heroItem}
+          initial="hidden"
+          animate="show"
           className="font-display max-w-4xl text-4xl font-bold leading-tight tracking-tight md:text-6xl"
         >
           We design it. We build it.{' '}
@@ -209,6 +176,8 @@ function Hero() {
 
         <motion.p
           variants={heroItem}
+          initial="hidden"
+          animate="show"
           className="mt-8 max-w-2xl text-lg text-muted md:text-xl"
         >
           Election intelligence platforms. School management systems. AI
@@ -218,7 +187,9 @@ function Hero() {
 
         <motion.div
           variants={heroItem}
-          className="mt-12 flex flex-col gap-4 sm:flex-row"
+          initial="hidden"
+          animate="show"
+          className="mt-10 flex flex-col gap-4 sm:flex-row"
         >
           <a
             href="#work"
@@ -233,7 +204,24 @@ function Hero() {
             <CalendarClock size={18} /> Talk to a designer
           </a>
         </motion.div>
-      </motion.div>
+
+        {/* Clean, static device row — no overlap, no animation, no per-shot pills */}
+        <div className="mt-16 grid grid-cols-4 gap-4 sm:gap-6 md:mt-20 md:gap-8">
+          {shots.map((shot) => (
+            <div key={shot.src} className="mx-auto w-full max-w-[9rem]">
+              <div className="aspect-[9/19] overflow-hidden rounded-2xl border border-line bg-white shadow-lg">
+                <img
+                  src={shot.src}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover object-top"
+                />
+              </div>
+              <p className="mt-3 text-xs font-medium text-muted">{shot.caption}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   )
 }
