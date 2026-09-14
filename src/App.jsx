@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { motion, useInView, useMotionValue, useSpring } from 'framer-motion'
+import { motion, AnimatePresence, useInView, useMotionValue, useSpring } from 'framer-motion'
 import {
   Menu,
   X,
@@ -122,63 +122,77 @@ const heroItem = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
 }
 
-const marqueeShots = [
+const heroImages = [
   {
-    src: '/images/sg-login.jpg',
-    caption: 'Supreme Gate, live',
-    size: 'h-44 md:h-72',
-    tilt: 'rotate-[-1.5deg]',
+    src: '/images/hero/hero-mockup.jpg',
+    alt: 'Supreme Gate, Hosanna Help Foundation and School Resource Center shown on desktop, tablet and phone',
   },
   {
-    src: '/images/careconnect-chat.jpg',
-    caption: 'CareConnect, 24/7',
-    size: 'h-36 md:h-56',
-    tilt: 'rotate-[1.5deg]',
+    src: '/images/hero/hero-desk.jpg',
+    alt: 'Developer desk setup with monitor and keyboard',
   },
   {
-    src: '/images/cbs-home.jpg',
-    caption: 'Career Builder Schools, live',
-    size: 'h-44 md:h-72',
-    tilt: 'rotate-[1deg]',
-  },
-  {
-    src: '/images/attendai-login.jpg',
-    caption: 'AttendAI, live',
-    size: 'h-36 md:h-56',
-    tilt: 'rotate-[-1deg]',
+    src: '/images/hero/hero-code.jpg',
+    alt: 'Close-up of code on screen',
   },
 ]
 
 function Hero() {
-  const shots = marqueeShots
+  const [active, setActive] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActive((i) => (i + 1) % heroImages.length)
+    }, 5000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 section-padding">
-      <div className="container-max relative z-10 flex flex-col items-center text-center">
+    <section className="relative flex min-h-[600px] items-center overflow-hidden md:min-h-[720px]">
+      {/* Crossfading background photos */}
+      <div className="absolute inset-0">
+        <AnimatePresence>
+          <motion.img
+            key={heroImages[active].src}
+            src={heroImages[active].src}
+            alt={heroImages[active].alt}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.2, ease: 'easeInOut' }}
+            className="absolute inset-0 h-full w-full object-cover object-top"
+          />
+        </AnimatePresence>
+        {/* Scrim for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/55 to-ink/85" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
+      </div>
+
+      <div className="container-max relative z-10 flex flex-col items-center px-6 py-28 text-center md:px-12">
         <motion.span
-          variants={heroItem}
-          initial="hidden"
-          animate="show"
-          className="mb-6 rounded-full border border-gold/30 bg-white/80 px-4 py-1.5 text-sm font-medium text-ink/80"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-6 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur"
         >
           Product design & engineering, built and shipped in-house
         </motion.span>
 
         <motion.h1
-          variants={heroItem}
-          initial="hidden"
-          animate="show"
-          className="font-display max-w-4xl text-4xl font-bold leading-tight tracking-tight md:text-6xl"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="font-display max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white md:text-6xl"
         >
           We design it. We build it.{' '}
           <span className="text-gold">It ships.</span>
         </motion.h1>
 
         <motion.p
-          variants={heroItem}
-          initial="hidden"
-          animate="show"
-          className="mt-8 max-w-2xl text-lg text-muted md:text-xl"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-8 max-w-2xl text-lg text-white/80 md:text-xl"
         >
           Election intelligence platforms. School management systems. AI
           content tools. Support portals. Nine-plus live products — designed
@@ -186,9 +200,9 @@ function Hero() {
         </motion.p>
 
         <motion.div
-          variants={heroItem}
-          initial="hidden"
-          animate="show"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-10 flex flex-col gap-4 sm:flex-row"
         >
           <a
@@ -199,26 +213,23 @@ function Hero() {
           </a>
           <a
             href="#contact"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-white px-8 py-4 text-base font-semibold text-ink transition-all hover:border-ink"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur transition-all hover:bg-white/20"
           >
             <CalendarClock size={18} /> Talk to a designer
           </a>
         </motion.div>
 
-        {/* Clean, static device row — no overlap, no animation, no per-shot pills */}
-        <div className="mt-16 grid grid-cols-4 gap-4 sm:gap-6 md:mt-20 md:gap-8">
-          {shots.map((shot) => (
-            <div key={shot.src} className="mx-auto w-full max-w-[9rem]">
-              <div className="aspect-[9/19] overflow-hidden rounded-2xl border border-line bg-white shadow-lg">
-                <img
-                  src={shot.src}
-                  alt=""
-                  loading="lazy"
-                  className="h-full w-full object-cover object-top"
-                />
-              </div>
-              <p className="mt-3 text-xs font-medium text-muted">{shot.caption}</p>
-            </div>
+        {/* Slide indicators */}
+        <div className="mt-14 flex gap-2">
+          {heroImages.map((img, i) => (
+            <button
+              key={img.src}
+              onClick={() => setActive(i)}
+              aria-label={`Show slide ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all ${
+                i === active ? 'w-8 bg-gold' : 'w-1.5 bg-white/40'
+              }`}
+            />
           ))}
         </div>
       </div>
