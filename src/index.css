@@ -8,11 +8,11 @@
   }
 
   body {
-    @apply bg-surface text-ink font-sans antialiased;
+    @apply bg-paper text-ink font-sans antialiased;
   }
 
   ::selection {
-    @apply bg-brand text-white;
+    @apply bg-gold text-ink;
   }
 }
 
