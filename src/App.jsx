@@ -251,7 +251,7 @@ function TrustStrip() {
     <div className="border-y border-line bg-white py-6">
       <div className="container-max flex flex-wrap items-center justify-center gap-x-10 gap-y-3 px-6">
         {names.map((n) => (
-          <span key={n} className="font-display text-sm font-semibold text-muted">
+          <span key={n} className="font-display text-base font-semibold text-muted">
             {n}
           </span>
         ))}
@@ -361,7 +361,7 @@ function Services() {
               <h3 className="font-display text-xl font-bold transition-colors group-hover:text-gold md:col-span-4">
                 {s.title}
               </h3>
-              <p className="text-sm leading-relaxed text-muted md:col-span-7">
+              <p className="text-base leading-relaxed text-muted md:col-span-7">
                 {s.desc}
               </p>
             </motion.div>
@@ -572,7 +572,7 @@ function Portfolio() {
                     {p.tag}
                   </span>
                   <h4 className="font-display mt-1 font-bold">{p.title}</h4>
-                  <p className="mt-1 text-xs text-muted">{p.subtitle}</p>
+                  <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
                 </div>
               </div>
             ))}
