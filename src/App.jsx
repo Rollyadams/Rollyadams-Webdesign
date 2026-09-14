@@ -335,8 +335,8 @@ const services = [
     desc: 'Complex SaaS platforms and data-rich dashboards built for clarity and control.',
   },
   {
-    title: 'Corporate & NGO Websites',
-    desc: 'High-converting, trust-building websites for established brands and organisations.',
+    title: 'Corporate & Startup Websites',
+    desc: 'High-converting, trust-building websites for established brands and growing startups.',
   },
   {
     title: 'Mobile App Design',
@@ -366,17 +366,17 @@ function Services() {
         </motion.div>
 
         <div className="mx-auto max-w-4xl">
-          {services.map((s, i) => (
+          {services.map((s) => (
             <motion.div
               key={s.title}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
+              initial={{ opacity: 0, x: 60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
               className="group grid gap-2 border-t border-line py-8 md:grid-cols-12 md:items-baseline md:gap-6"
             >
               <span className="hidden h-px w-8 self-center bg-line md:col-span-1 md:block" />
-              <h3 className="font-display text-xl font-bold transition-colors group-hover:text-gold md:col-span-4">
+              <h3 className="font-display text-xl font-bold transition-colors [@media(hover:hover)]:group-hover:text-gold md:col-span-4">
                 {s.title}
               </h3>
               <p className="text-base leading-relaxed text-muted md:col-span-7">
@@ -543,7 +543,7 @@ function Portfolio() {
               </div>
 
               <div className="mt-6">
-                <h3 className="font-display text-lg font-bold transition-colors group-hover:text-gold">
+                <h3 className="font-display text-lg font-bold transition-colors [@media(hover:hover)]:group-hover:text-gold">
                   {p.title}
                 </h3>
                 <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
