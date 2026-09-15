@@ -1,5 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence, useInView, useMotionValue, useSpring } from 'framer-motion'
+import {
+  motion,
+  AnimatePresence,
+  useInView,
+  useMotionValue,
+  useSpring,
+  useScroll,
+  useTransform,
+} from 'framer-motion'
 import {
   Menu,
   X,
@@ -392,6 +400,54 @@ function Services() {
 }
 
 /* ============ PORTFOLIO — frames float free, no card boxes ============ */
+/* ============ TILT CARD — scroll-linked rotation + mouse-move tilt, real perspective ============ */
+function TiltCard({ children, className = '', index = 0, maxTilt = 14 }) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start 0.92', 'end 0.08'],
+  })
+  const dir = index % 2 === 0 ? 1 : -1
+  const scrollRotateY = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    [dir * maxTilt, 0, -dir * maxTilt]
+  )
+
+  const mouseY = useMotionValue(0)
+  const mouseX = useMotionValue(0)
+  const springY = useSpring(mouseY, { stiffness: 220, damping: 22 })
+  const springX = useSpring(mouseX, { stiffness: 220, damping: 22 })
+
+  const rotateY = useTransform([scrollRotateY, springY], ([s, m]) => s + m)
+
+  function handleMouseMove(e) {
+    const rect = ref.current.getBoundingClientRect()
+    const px = (e.clientX - rect.left) / rect.width - 0.5
+    const py = (e.clientY - rect.top) / rect.height - 0.5
+    mouseY.set(px * (maxTilt * 0.9))
+    mouseX.set(-py * (maxTilt * 0.7))
+  }
+  function handleMouseLeave() {
+    mouseY.set(0)
+    mouseX.set(0)
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{ perspective: 1000 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <motion.div style={{ rotateX: springX, rotateY, transformStyle: 'preserve-3d' }}>
+        {children}
+      </motion.div>
+    </div>
+  )
+}
+
 const featured = [
   {
     tag: 'SaaS Platform',
@@ -531,16 +587,22 @@ function Portfolio() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="group block"
             >
-              <div className="relative mx-auto grid w-44 place-items-center sm:w-52">
-                <div className="absolute h-36 w-36 rounded-full bg-gold/10 blur-3xl" />
-                <ShotFrame
-                  item={p}
-                  phoneClass="relative w-full transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02]"
-                />
-                <span className="absolute -top-4 left-0 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
-                  {p.tag}
-                </span>
-              </div>
+              <TiltCard
+                index={i}
+                maxTilt={16}
+                className="relative mx-auto w-44 sm:w-52"
+              >
+                <div className="relative grid place-items-center">
+                  <div className="absolute h-36 w-36 rounded-full bg-gold/10 blur-3xl" />
+                  <ShotFrame
+                    item={p}
+                    phoneClass="relative w-full transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.03]"
+                  />
+                  <span className="absolute -top-4 left-0 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
+                    {p.tag}
+                  </span>
+                </div>
+              </TiltCard>
 
               <div className="mt-6">
                 <h3 className="font-display text-lg font-bold transition-colors [@media(hover:hover)]:group-hover:text-gold">
@@ -577,14 +639,14 @@ function Portfolio() {
             transition={{ duration: 0.5 }}
             className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8"
           >
-            {archive.map((p) => (
+            {archive.map((p, i) => (
               <div key={p.title} className="group">
-                <div className="relative mx-auto w-32 sm:w-36">
+                <TiltCard index={i} maxTilt={9} className="relative mx-auto w-32 sm:w-36">
                   <ShotFrame
                     item={p}
                     phoneClass="w-full transition-transform duration-500 group-hover:-translate-y-1.5"
                   />
-                </div>
+                </TiltCard>
                 <div className="mt-4">
                   <span className="text-[11px] font-semibold text-gold">
                     {p.tag}
