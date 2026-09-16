@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, lazy, Suspense } from 'react'
 import {
   motion,
   AnimatePresence,
@@ -18,6 +18,8 @@ import {
   Mail,
   Send,
 } from 'lucide-react'
+
+const WorkScene3D = lazy(() => import('./WorkScene3D'))
 
 /* ============ COUNTER ANIMATION ============ */
 function StatNumber({ to }) {
@@ -554,8 +556,80 @@ const archive = [
   },
 ]
 
+/* ============ 3D SUPPORT CHECK — capability + preference gate ============ */
+function use3DSupport() {
+  const [supported, setSupported] = useState(false)
+  useEffect(() => {
+    let hasWebGL = false
+    try {
+      const canvas = document.createElement('canvas')
+      hasWebGL = !!(
+        window.WebGLRenderingContext &&
+        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+      )
+    } catch {
+      hasWebGL = false
+    }
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches
+    const saveData = navigator.connection?.saveData === true
+    setSupported(hasWebGL && !prefersReduced && !saveData)
+  }, [])
+  return supported
+}
+
+/* ============ FEATURED GRID — the tilt-card version; also the fallback for the 3D scene ============ */
+function FeaturedGrid() {
+  return (
+    <div className="grid gap-12 md:grid-cols-3 md:gap-8">
+      {featured.map((p, i) => (
+        <motion.a
+          key={p.title}
+          href={p.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: i * 0.1 }}
+          className="group block"
+        >
+          <TiltCard index={i} maxTilt={16} className="relative mx-auto w-44 sm:w-52">
+            <div className="relative grid place-items-center">
+              <div className="absolute h-36 w-36 rounded-full bg-gold/10 blur-3xl" />
+              <ShotFrame
+                item={p}
+                phoneClass="relative w-full transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.03]"
+              />
+              <span className="absolute -top-4 left-0 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
+                {p.tag}
+              </span>
+            </div>
+          </TiltCard>
+
+          <div className="mt-6">
+            <h3 className="font-display text-lg font-bold transition-colors [@media(hover:hover)]:group-hover:text-gold">
+              {p.title}
+            </h3>
+            <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
+            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-gold">
+              View Live <ArrowUpRight size={16} />
+            </span>
+          </div>
+        </motion.a>
+      ))}
+    </div>
+  )
+}
+
 function Portfolio() {
   const [showMore, setShowMore] = useState(false)
+  const [selected, setSelected] = useState(null)
+  const sceneWrapRef = useRef(null)
+  const sceneInView = useInView(sceneWrapRef, { once: true, margin: '300px' })
+  const can3D = use3DSupport()
+  const show3D = can3D && sceneInView
 
   return (
     <section id="work" className="section-padding">
@@ -571,51 +645,69 @@ function Portfolio() {
           <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Selected projects
           </h2>
+          {can3D && (
+            <p className="mx-auto mt-3 max-w-md text-sm text-muted">
+              Scroll through — tap a panel to open it.
+            </p>
+          )}
         </motion.div>
 
-        {/* Featured 3 — floating free */}
-        <div className="grid gap-12 md:grid-cols-3 md:gap-8">
-          {featured.map((p, i) => (
-            <motion.a
-              key={p.title}
-              href={p.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group block"
-            >
-              <TiltCard
-                index={i}
-                maxTilt={16}
-                className="relative mx-auto w-44 sm:w-52"
-              >
-                <div className="relative grid place-items-center">
-                  <div className="absolute h-36 w-36 rounded-full bg-gold/10 blur-3xl" />
-                  <ShotFrame
-                    item={p}
-                    phoneClass="relative w-full transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.03]"
-                  />
-                  <span className="absolute -top-4 left-0 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
-                    {p.tag}
-                  </span>
-                </div>
-              </TiltCard>
-
-              <div className="mt-6">
-                <h3 className="font-display text-lg font-bold transition-colors [@media(hover:hover)]:group-hover:text-gold">
-                  {p.title}
-                </h3>
-                <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-gold">
-                  View Live <ArrowUpRight size={16} />
-                </span>
+        {/* Featured 3 — real 3D scene when supported, tilt-card grid otherwise */}
+        <div ref={sceneWrapRef}>
+          {show3D ? (
+            <Suspense fallback={<FeaturedGrid />}>
+              <div className="relative h-[65vh] min-h-[420px] md:h-[80vh]">
+                <WorkScene3D projects={featured} onSelect={setSelected} />
               </div>
-            </motion.a>
-          ))}
+            </Suspense>
+          ) : (
+            <FeaturedGrid />
+          )}
         </div>
+
+        {/* Selected-project detail overlay, used by the 3D scene */}
+        <AnimatePresence>
+          {selected && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 p-6 backdrop-blur-sm"
+              onClick={() => setSelected(null)}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 24, scale: 0.96 }}
+                transition={{ duration: 0.3 }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl"
+              >
+                <span className="text-xs font-semibold text-gold">{selected.tag}</span>
+                <h3 className="font-display mt-2 text-2xl font-bold">{selected.title}</h3>
+                <p className="mt-2 text-sm text-muted">{selected.subtitle}</p>
+                <div className="mt-6 flex justify-center gap-3">
+                  {selected.link && selected.link !== '#' && (
+                    <a
+                      href={selected.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-white hover:bg-gold-dark"
+                    >
+                      View Live <ArrowUpRight size={16} />
+                    </a>
+                  )}
+                  <button
+                    onClick={() => setSelected(null)}
+                    className="rounded-lg border border-line px-5 py-2.5 text-sm font-semibold text-ink hover:border-gold"
+                  >
+                    Close
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* View more toggle */}
         <div className="mt-16 text-center">
@@ -943,4 +1035,4 @@ export default function App() {
       <Footer />
     </div>
   )
-} 
+}
