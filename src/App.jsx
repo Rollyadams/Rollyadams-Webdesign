@@ -656,9 +656,7 @@ function Portfolio() {
         <div ref={sceneWrapRef}>
           {show3D ? (
             <Suspense fallback={<FeaturedGrid />}>
-              <div className="relative h-[65vh] min-h-[420px] md:h-[80vh]">
-                <WorkScene3D projects={featured} onSelect={setSelected} />
-              </div>
+              <WorkScene3D projects={featured} onSelect={setSelected} />
             </Suspense>
           ) : (
             <FeaturedGrid />
