@@ -6,27 +6,32 @@ import {
   AmbientLight,
   DirectionalLight,
   TextureLoader,
+  VideoTexture,
   PlaneGeometry,
   MeshStandardMaterial,
   Mesh,
+  Group,
   DoubleSide,
   SRGBColorSpace,
   Raycaster,
   Vector2,
 } from 'three'
 
-// Kept close to center on X so every panel stays inside the camera's
-// field of view as it passes — nothing should ever clip off-frame.
-const LAYOUT = [
-  { x: -0.45, y: 0.25, z: 0 },
-  { x: 0.5, y: -0.2, z: -4.5 },
-  { x: -0.4, y: -0.3, z: -9 },
-]
-
-const PANEL_W = 1.6
-const PANEL_ASPECT = 19 / 9 // matches the real screenshot aspect ratio
+const PANEL_ASPECT = 19 / 9 // matches the real screenshot/recording aspect ratio
 const CAMERA_START_Z = 5
 const CAMERA_END_Z = -12
+
+// Placeholder color shown before a texture (image or first video frame) is ready.
+const PLACEHOLDER_COLOR = 0x15130f
+
+function makePlaceholderMaterial() {
+  return new MeshStandardMaterial({
+    color: PLACEHOLDER_COLOR,
+    roughness: 0.65,
+    metalness: 0.05,
+    side: DoubleSide,
+  })
+}
 
 export default function WorkScene3D({ projects, onSelect }) {
   const wrapperRef = useRef(null) // tall scroll-distance element
@@ -41,7 +46,7 @@ export default function WorkScene3D({ projects, onSelect }) {
     let height = mount.clientHeight || 1
 
     const scene = new Scene()
-    const camera = new PerspectiveCamera(50, width / height, 0.1, 100)
+    const camera = new PerspectiveCamera(52, width / height, 0.1, 100)
     camera.position.set(0, 0, CAMERA_START_Z)
 
     const renderer = new WebGLRenderer({ antialias: true, alpha: true })
@@ -55,30 +60,47 @@ export default function WorkScene3D({ projects, onSelect }) {
     dirLight.position.set(2, 3, 5)
     scene.add(dirLight)
 
-    const loader = new TextureLoader()
-    const meshes = []
+    const textureLoader = new TextureLoader()
+    const meshes = [] // every raycast-able mesh, each tagged with userData.project
+    const videos = [] // every <video> element, for cleanup + pause/play
 
-    projects.forEach((p, i) => {
-      const pos = LAYOUT[i % LAYOUT.length]
-      const geo = new PlaneGeometry(PANEL_W, PANEL_W * PANEL_ASPECT)
+    function addVideoPanel(group, videoSrc, w, h, project) {
+      const video = document.createElement('video')
+      video.src = videoSrc
+      video.loop = true
+      video.muted = true
+      video.playsInline = true
+      video.crossOrigin = 'anonymous'
+      video.play().catch(() => {
+        /* autoplay can be blocked before any user interaction — harmless, stays on first frame */
+      })
+      videos.push(video)
 
-      // Flat brand-ink placeholder so the panel exists immediately —
-      // texture swaps in once it loads, never a blank/broken frame.
+      const texture = new VideoTexture(video)
+      texture.colorSpace = SRGBColorSpace
+
       const mat = new MeshStandardMaterial({
-        color: 0x15130f,
+        map: texture,
         roughness: 0.65,
         metalness: 0.05,
         side: DoubleSide,
       })
+      const mesh = new Mesh(new PlaneGeometry(w, h), mat)
+      mesh.userData.project = project
+      group.add(mesh)
+      meshes.push(mesh)
+      return mesh
+    }
 
-      const mesh = new Mesh(geo, mat)
-      mesh.position.set(pos.x, pos.y, pos.z)
-      mesh.userData.project = p
-      scene.add(mesh)
+    function addImagePanel(group, imgSrc, w, h, project) {
+      const mat = makePlaceholderMaterial()
+      const mesh = new Mesh(new PlaneGeometry(w, h), mat)
+      mesh.userData.project = project
+      group.add(mesh)
       meshes.push(mesh)
 
-      loader.load(
-        p.img,
+      textureLoader.load(
+        imgSrc,
         (tex) => {
           tex.colorSpace = SRGBColorSpace
           mat.map = tex
@@ -87,15 +109,54 @@ export default function WorkScene3D({ projects, onSelect }) {
         },
         undefined,
         () => {
-          /* texture failed to load — keep the flat panel, fail quietly */
+          /* image failed to load — keep the flat placeholder, fail quietly */
         }
       )
-    })
+      return mesh
+    }
 
-    // ---- Scroll progress, calibrated against the TALL wrapper, not the
-    // sticky viewport slice — this is what fixes the "front-loaded" bug:
-    // progress now advances evenly across the wrapper's own extra height,
-    // while the canvas itself stays pinned on screen the whole time.
+    // ---- Panel 1: PHONE — Supreme Gate, single looping recording ----
+    const phoneGroup = new Group()
+    phoneGroup.position.set(-0.45, 0.25, 0)
+    addVideoPanel(phoneGroup, '/videos/supreme-gate.mp4', 1.5, 1.5 * PANEL_ASPECT, projects[0])
+    scene.add(phoneGroup)
+
+    // ---- Panel 2: LAPTOP — Supreme Gate + Career Builder Schools side by side,
+    // one wide "screen" made of two independent looping recordings. Both halves
+    // link to the same project (Career Builder Schools) when tapped.
+    const laptopGroup = new Group()
+    laptopGroup.position.set(0.5, -0.2, -4.5)
+    const subW = 0.85
+    const subH = subW * PANEL_ASPECT
+    const gap = 0.12
+    const leftMesh = addVideoPanel(
+      laptopGroup,
+      '/videos/supreme-gate.mp4',
+      subW,
+      subH,
+      projects[1]
+    )
+    leftMesh.position.x = -(subW / 2 + gap / 2)
+    const rightMesh = addVideoPanel(
+      laptopGroup,
+      '/videos/career-builder-schools.mp4',
+      subW,
+      subH,
+      projects[1]
+    )
+    rightMesh.position.x = subW / 2 + gap / 2
+    scene.add(laptopGroup)
+
+    // ---- Panel 3: IPAD — HHF CareConnect, static image (as agreed, no video yet) ----
+    const ipadGroup = new Group()
+    ipadGroup.position.set(-0.4, -0.3, -9)
+    addImagePanel(ipadGroup, projects[2].img, 1.5, 1.5 * PANEL_ASPECT, projects[2])
+    scene.add(ipadGroup)
+
+    const allGroups = [phoneGroup, laptopGroup, ipadGroup]
+
+    // ---- Scroll progress, calibrated against the TALL wrapper — the canvas
+    // stays pinned (sticky) on screen while scroll maps evenly to camera travel.
     let scrollProgress = 0
     let targetProgress = 0
 
@@ -118,8 +179,8 @@ export default function WorkScene3D({ projects, onSelect }) {
         CAMERA_START_Z + scrollProgress * (CAMERA_END_Z - CAMERA_START_Z)
 
       const t = performance.now() * 0.0002
-      meshes.forEach((m) => {
-        m.rotation.y = Math.sin(t + m.position.x) * 0.04
+      allGroups.forEach((g) => {
+        g.rotation.y = Math.sin(t + g.position.x) * 0.04
       })
 
       renderer.render(scene, camera)
@@ -136,10 +197,19 @@ export default function WorkScene3D({ projects, onSelect }) {
     }
     window.addEventListener('resize', handleResize)
 
-    // ---- Tap-to-select. Uses the browser's synthesized `click` event,
-    // not raw pointerup — click only fires for a genuine tap and is
-    // automatically suppressed if the same touch turned into a scroll,
-    // which is what silently broke selection on mobile before.
+    // Pause all video decoding when the tab isn't visible — real battery/data cost otherwise.
+    function handleVisibility() {
+      if (document.hidden) {
+        videos.forEach((v) => v.pause())
+      } else {
+        videos.forEach((v) => v.play().catch(() => {}))
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+
+    // ---- Tap-to-select via the browser's `click` event (not raw pointerup) —
+    // click only fires for a genuine tap and is automatically suppressed if the
+    // same touch turned into a scroll, which is what broke selection before.
     const raycaster = new Raycaster()
     const pointer = new Vector2()
 
@@ -159,7 +229,13 @@ export default function WorkScene3D({ projects, onSelect }) {
       cancelAnimationFrame(rafId)
       window.removeEventListener('scroll', readScroll)
       window.removeEventListener('resize', handleResize)
+      document.removeEventListener('visibilitychange', handleVisibility)
       renderer.domElement.removeEventListener('click', handleClick)
+      videos.forEach((v) => {
+        v.pause()
+        v.src = ''
+        v.load()
+      })
       meshes.forEach((m) => {
         m.geometry.dispose()
         m.material.map?.dispose()
