@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, lazy, Suspense } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   motion,
   AnimatePresence,
@@ -19,7 +19,7 @@ import {
   Send,
 } from 'lucide-react'
 
-const WorkScene3D = lazy(() => import('./WorkScene3D'))
+import PhotoShowcase from './PhotoShowcase'
 
 /* ============ COUNTER ANIMATION ============ */
 function StatNumber({ to }) {
@@ -556,80 +556,11 @@ const archive = [
   },
 ]
 
-/* ============ 3D SUPPORT CHECK — capability + preference gate ============ */
-function use3DSupport() {
-  const [supported, setSupported] = useState(false)
-  useEffect(() => {
-    let hasWebGL = false
-    try {
-      const canvas = document.createElement('canvas')
-      hasWebGL = !!(
-        window.WebGLRenderingContext &&
-        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-      )
-    } catch {
-      hasWebGL = false
-    }
-    const prefersReduced = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
-    const saveData = navigator.connection?.saveData === true
-    setSupported(hasWebGL && !prefersReduced && !saveData)
-  }, [])
-  return supported
-}
-
-/* ============ FEATURED GRID — the tilt-card version; also the fallback for the 3D scene ============ */
-function FeaturedGrid() {
-  return (
-    <div className="grid gap-12 md:grid-cols-3 md:gap-8">
-      {featured.map((p, i) => (
-        <motion.a
-          key={p.title}
-          href={p.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: i * 0.1 }}
-          className="group block"
-        >
-          <TiltCard index={i} maxTilt={16} className="relative mx-auto w-44 sm:w-52">
-            <div className="relative grid place-items-center">
-              <div className="absolute h-36 w-36 rounded-full bg-gold/10 blur-3xl" />
-              <ShotFrame
-                item={p}
-                phoneClass="relative w-full transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-[1.03]"
-              />
-              <span className="absolute -top-4 left-0 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
-                {p.tag}
-              </span>
-            </div>
-          </TiltCard>
-
-          <div className="mt-6">
-            <h3 className="font-display text-lg font-bold transition-colors [@media(hover:hover)]:group-hover:text-gold">
-              {p.title}
-            </h3>
-            <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
-            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-gold">
-              View Live <ArrowUpRight size={16} />
-            </span>
-          </div>
-        </motion.a>
-      ))}
-    </div>
-  )
-}
-
 function Portfolio() {
   const [showMore, setShowMore] = useState(false)
   const [selected, setSelected] = useState(null)
-  const sceneWrapRef = useRef(null)
-  const sceneInView = useInView(sceneWrapRef, { once: true, margin: '300px' })
-  const can3D = use3DSupport()
-  const show3D = can3D && sceneInView
+  const showcaseRef = useRef(null)
+  const showcaseInView = useInView(showcaseRef, { once: true, margin: '400px' })
 
   return (
     <section id="work" className="section-padding">
@@ -645,25 +576,21 @@ function Portfolio() {
           <h2 className="font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl">
             Selected projects
           </h2>
-          {can3D && (
-            <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-              Scroll through — tap a panel to open it.
-            </p>
-          )}
+          <p className="mx-auto mt-3 max-w-md text-sm text-muted">
+            Tap a screen to open that project.
+          </p>
         </motion.div>
 
-        {/* Featured 3 — real 3D scene when supported, tilt-card grid otherwise */}
-        <div ref={sceneWrapRef}>
-          {show3D ? (
-            <Suspense fallback={<FeaturedGrid />}>
-              <WorkScene3D projects={featured} onSelect={setSelected} />
-            </Suspense>
+        {/* Featured 3 — real products, live and scrolling, on your actual desk photo */}
+        <div ref={showcaseRef}>
+          {showcaseInView ? (
+            <PhotoShowcase projects={featured} onSelect={setSelected} />
           ) : (
-            <FeaturedGrid />
+            <div className="mx-auto aspect-[1536/1024] w-full max-w-4xl rounded-2xl bg-line/40" />
           )}
         </div>
 
-        {/* Selected-project detail overlay, used by the 3D scene */}
+        {/* Selected-project detail overlay */}
         <AnimatePresence>
           {selected && (
             <motion.div
