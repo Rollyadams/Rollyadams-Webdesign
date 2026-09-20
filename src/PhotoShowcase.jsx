@@ -13,10 +13,10 @@ const TABLET_HOTSPOT = { left: 62.5, top: 28.8, width: 21.5, height: 38.1 }
 // perspective warp rather than a straight rectangle — these are its four
 // screen corners, clockwise from top-left, as % of the full image.
 const PHONE_CORNERS = [
-  { x: 61.69, y: 73.0 }, // top-left
-  { x: 71.45, y: 75.4 }, // top-right
-  { x: 69.8, y: 90.8 }, // bottom-right
-  { x: 60.4, y: 87.6 }, // bottom-left
+  { x: 63.54, y: 72.85 }, // top-left
+  { x: 73.76, y: 76.86 }, // top-right
+  { x: 69.34, y: 92.29 }, // bottom-right
+  { x: 56.97, y: 89.36 }, // bottom-left
 ]
 
 // Standard unit-square → quadrilateral projective mapping. Given four
