@@ -22,8 +22,8 @@ import {
 import PhotoShowcase from './PhotoShowcase'
 
 /* ============ BOOKING (Calendly) ============ */
-// 👉 Replace with your real Calendly link, e.g. https://calendly.com/adamson/15min
-const BOOKING_LINK = 'https://calendly.com/YOUR-LINK'
+// Calendly booking link
+const BOOKING_LINK = 'https://calendly.com/rollyadamstechworld/30min'
 
 // Opens the Calendly popup. If the Calendly script hasn't loaded
 // (ad-blocker, slow network), it falls back to opening the link in a new tab.
