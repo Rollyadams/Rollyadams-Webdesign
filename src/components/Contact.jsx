@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { CalendarClock, Mail, Send } from 'lucide-react'
 
 const BOOKING_LINK = 'https://calendly.com/YOUR-LINK' // TODO: replace with your real Calendly link
-const STUDIO_EMAIL = 'hello@rollyadamstechworld.com.ng' // TODO: create this email on your domain later
+const STUDIO_EMAIL = 'adamson@rollyadamstechworld.com.ng' // TODO: create this email on your domain later
 
 export default function Contact() {
   const handleSubmit = (e) => {
