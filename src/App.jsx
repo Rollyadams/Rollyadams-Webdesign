@@ -739,7 +739,7 @@ function About() {
 
 /* ============ CONTACT ============ */
 const BOOKING_LINK = 'https://calendly.com/YOUR-LINK'
-const STUDIO_EMAIL = 'hello@rollyadamstechworld.com.ng'
+const STUDIO_EMAIL = 'adamson@rollyadamstechworld.com.ng'
 
 function Contact() {
   const handleSubmit = (e) => {
