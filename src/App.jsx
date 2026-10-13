@@ -756,17 +756,61 @@ function About() {
 /* ============ CONTACT ============ */
 const STUDIO_EMAIL = 'adamson@rollyadamstechworld.com.ng'
 
+// Contact form (Web3Forms) — get your free access key at https://web3forms.com
+// using adamson@rollyadamstechworld.com.ng, then paste it below.
+const WEB3FORMS_KEY = 'YOUR-ACCESS-KEY'
+
 function Contact() {
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const data = new FormData(e.target)
-    const subject = encodeURIComponent(
-      `New project inquiry — ${data.get('name')}`
-    )
+  const [status, setStatus] = useState('idle') // idle | sending | success | error
+
+  const mailtoFallback = (data) => {
+    const subject = encodeURIComponent(`New project inquiry — ${data.get('name')}`)
     const body = encodeURIComponent(
       `Name: ${data.get('name')}\nEmail: ${data.get('email')}\nProject type: ${data.get('type')}\n\n${data.get('message')}`
     )
     window.location.href = `mailto:${STUDIO_EMAIL}?subject=${subject}&body=${body}`
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const form = e.target
+    const data = new FormData(form)
+
+    // Spam trap: real visitors never fill this hidden field
+    if (data.get('botcheck')) return
+
+    // Key not set yet -> keep the old behaviour so the form never breaks
+    if (WEB3FORMS_KEY === 'YOUR-ACCESS-KEY') {
+      mailtoFallback(data)
+      return
+    }
+
+    setStatus('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `New project inquiry — ${data.get('name')}`,
+          from_name: 'Rollyadams WebStudio website',
+          name: data.get('name'),
+          email: data.get('email'),
+          replyto: data.get('email'),
+          project_type: data.get('type'),
+          message: data.get('message'),
+        }),
+      })
+      const json = await res.json()
+      if (json.success) {
+        setStatus('success')
+        form.reset()
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -871,12 +915,35 @@ function Contact() {
             />
           </div>
 
+          {/* Hidden spam trap */}
+          <input
+            type="checkbox"
+            name="botcheck"
+            tabIndex={-1}
+            autoComplete="off"
+            className="hidden"
+            style={{ display: 'none' }}
+          />
+
           <button
             type="submit"
-            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-ink px-8 py-4 text-base font-semibold text-white transition-all hover:bg-black hover:-translate-y-0.5"
+            disabled={status === 'sending'}
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-ink px-8 py-4 text-base font-semibold text-white transition-all hover:bg-black hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
           >
-            <Send size={18} /> Send Message
+            <Send size={18} /> {status === 'sending' ? 'Sending...' : 'Send Message'}
           </button>
+
+          {status === 'success' && (
+            <p role="status" className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-medium text-green-800">
+              Thank you! Your message has been sent. We'll reply within 24 hours.
+            </p>
+          )}
+          {status === 'error' && (
+            <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
+              Something went wrong. Please email us directly at{' '}
+              <a href={`mailto:${STUDIO_EMAIL}`} className="underline">{STUDIO_EMAIL}</a>.
+            </p>
+          )}
         </motion.form>
       </div>
     </section>
