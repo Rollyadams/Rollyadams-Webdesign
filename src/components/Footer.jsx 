@@ -1,6 +1,6 @@
 import { Mail } from 'lucide-react'
 
-const STUDIO_EMAIL = 'hello@rollyadamstechworld.com.ng'
+const STUDIO_EMAIL = 'adamson@rollyadamstechworld.com.ng'
 
 const quickLinks = [
   { name: 'Services', href: '#services' },
