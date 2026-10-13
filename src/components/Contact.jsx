@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 import { CalendarClock, Mail, Send } from 'lucide-react'
 
-const BOOKING_LINK = 'https://calendly.com/YOUR-LINK' // TODO: replace with your real Calendly link
-const STUDIO_EMAIL = 'adamson@rollyadamstechworld.com.ng' // TODO: create this email on your domain later
+const BOOKING_LINK = 'https://calendly.com' 
+const STUDIO_EMAIL = 'adamson@rollyadamstechworld.com.ng' 
 
 export default function Contact() {
   const handleSubmit = (e) => {
@@ -94,10 +94,9 @@ export default function Contact() {
               className="w-full rounded-lg border border-slate-300 bg-surface px-4 py-3 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20" />
           </div>
 
-          <button type="submit"
-            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-ink px-8 py-4 text-base font-semibold text-white transition-all hover:bg-black hover:-translate-y-0.5">
+          <div className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-ink px-8 py-4 text-base font-semibold text-white transition-all hover:bg-black hover:-translate-y-0.5">
             <Send size={18} /> Send Message
-          </button>
+          </div>
         </motion.form>
       </div>
     </section>
