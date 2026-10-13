@@ -21,6 +21,21 @@ import {
 
 import PhotoShowcase from './PhotoShowcase'
 
+/* ============ BOOKING (Calendly) ============ */
+// 👉 Replace with your real Calendly link, e.g. https://calendly.com/adamson/15min
+const BOOKING_LINK = 'https://calendly.com/YOUR-LINK'
+
+// Opens the Calendly popup. If the Calendly script hasn't loaded
+// (ad-blocker, slow network), it falls back to opening the link in a new tab.
+const openBooking = (e) => {
+  if (e) e.preventDefault()
+  if (window.Calendly) {
+    window.Calendly.initPopupWidget({ url: BOOKING_LINK })
+  } else {
+    window.open(BOOKING_LINK, '_blank', 'noopener,noreferrer')
+  }
+}
+
 /* ============ COUNTER ANIMATION ============ */
 function StatNumber({ to }) {
   const ref = useRef(null)
@@ -80,7 +95,8 @@ function Navbar() {
             </a>
           ))}
           <a
-            href="#contact"
+            href={BOOKING_LINK}
+            onClick={openBooking}
             className="rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-gold/30 transition-all hover:bg-gold-dark hover:-translate-y-0.5"
           >
             Book a Call
@@ -109,8 +125,8 @@ function Navbar() {
             </a>
           ))}
           <a
-            href="#contact"
-            onClick={() => setOpen(false)}
+            href={BOOKING_LINK}
+            onClick={(e) => { setOpen(false); openBooking(e) }}
             className="rounded-lg bg-gold px-5 py-3 text-center text-sm font-semibold text-white"
           >
             Book a Call
@@ -738,7 +754,6 @@ function About() {
 }
 
 /* ============ CONTACT ============ */
-const BOOKING_LINK = 'https://calendly.com/YOUR-LINK'
 const STUDIO_EMAIL = 'adamson@rollyadamstechworld.com.ng'
 
 function Contact() {
@@ -775,8 +790,7 @@ function Contact() {
           <div className="mt-8 flex flex-col gap-4">
             <a
               href={BOOKING_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={openBooking}
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-base font-semibold text-white shadow-lg shadow-gold/30 transition-all hover:bg-gold-dark hover:-translate-y-0.5"
             >
               <CalendarClock size={18} /> Book a 15-min Discovery Call
