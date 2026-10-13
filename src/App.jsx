@@ -758,7 +758,7 @@ const STUDIO_EMAIL = 'adamson@rollyadamstechworld.com.ng'
 
 // Contact form (Web3Forms) — get your free access key at https://web3forms.com
 // using adamson@rollyadamstechworld.com.ng, then paste it below.
-const WEB3FORMS_KEY = 'YOUR-ACCESS-KEY'
+const WEB3FORMS_KEY = 'd8fb104e-d2dd-46f6-a323-592c0a7602ab'
 
 function Contact() {
   const [status, setStatus] = useState('idle') // idle | sending | success | error
@@ -780,7 +780,7 @@ function Contact() {
     if (data.get('botcheck')) return
 
     // Key not set yet -> keep the old behaviour so the form never breaks
-    if (WEB3FORMS_KEY === 'YOUR-ACCESS-KEY') {
+    if (!WEB3FORMS_KEY) {
       mailtoFallback(data)
       return
     }
