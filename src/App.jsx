@@ -7,6 +7,7 @@ import {
   useSpring,
   useScroll,
   useTransform,
+  useReducedMotion,
 } from 'framer-motion'
 import {
   Menu,
@@ -304,30 +305,259 @@ function TrustStrip() {
   )
 }
 
-function Manifesto() {
+const manifestoScreens = [
+  {
+    src: '/images/sg-home.jpg',
+    pos: 'left-[-2.5rem] top-8 md:left-[4%] md:top-14',
+    rotate: -8,
+    range: [50, -50],
+    float: 7,
+  },
+  {
+    src: '/images/cbs-home.jpg',
+    pos: 'right-[-3rem] top-24 md:right-[4%] md:top-28',
+    rotate: 7,
+    range: [80, -80],
+    float: 9,
+  },
+  {
+    src: '/images/src-dashboard.jpg',
+    pos: 'left-[-2rem] bottom-10 md:left-[7%] md:bottom-12',
+    rotate: 6,
+    range: [90, -40],
+    float: 8,
+  },
+  {
+    src: '/images/attendai-login.jpg',
+    pos: 'right-[-2.5rem] bottom-6 md:right-[8%] md:bottom-16',
+    rotate: -6,
+    range: [40, -90],
+    float: 10,
+  },
+]
+
+const liveProducts = [
+  'Supreme Gate',
+  'Career Builder Schools',
+  'HHF CareConnect',
+  'School Resource Center',
+  'AttendAI',
+]
+
+const manifestoWords = [
+  'From', 'the', 'idea', 'in', 'your', 'head', 'to', 'the', 'product', 'in', 'your',
+]
+
+const headlineParent = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09 } },
+}
+
+const headlineWord = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(8px)' },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+}
+
+function FloatingScreen({ screen, progress, reduce }) {
+  const y = useTransform(progress, [0, 1], screen.range)
   return (
-    <section className="bg-ink py-24 md:py-32">
-      <div className="container-max px-6 text-center">
+    <motion.div
+      style={{ y: reduce ? 0 : y, rotate: screen.rotate }}
+      className={`pointer-events-none absolute w-40 md:w-60 ${screen.pos}`}
+    >
+      <motion.div
+        animate={reduce ? undefined : { y: [0, -14, 0] }}
+        transition={{ duration: screen.float, repeat: Infinity, ease: 'easeInOut' }}
+        className="overflow-hidden rounded-xl border border-white/15 bg-ink opacity-30 shadow-2xl shadow-black/60 md:opacity-50"
+      >
+        <div className="flex gap-1 border-b border-white/10 bg-white/5 px-2.5 py-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
+        </div>
+        <img
+          src={screen.src}
+          alt=""
+          loading="lazy"
+          className="aspect-[4/3] w-full object-cover object-top"
+        />
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function Manifesto() {
+  const reduce = useReducedMotion()
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+
+  const drift = (x, y, duration) =>
+    reduce
+      ? undefined
+      : {
+          animate: { x: [0, x, -x / 2, 0], y: [0, y, -y / 2, 0], scale: [1, 1.15, 0.95, 1] },
+          transition: { duration, repeat: Infinity, ease: 'easeInOut' },
+        }
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-ink py-28 md:py-40"
+    >
+      {/* 1. Drifting gold + moss glows */}
+      <motion.div
+        {...drift(60, -40, 16)}
+        className="pointer-events-none absolute left-[5%] top-[8%] h-72 w-72 rounded-full bg-gold/25 blur-3xl md:h-96 md:w-96"
+      />
+      <motion.div
+        {...drift(-50, 40, 19)}
+        className="pointer-events-none absolute bottom-[4%] right-[6%] h-72 w-72 rounded-full bg-moss/40 blur-3xl md:h-96 md:w-96"
+      />
+      <motion.div
+        {...drift(40, 50, 22)}
+        className="pointer-events-none absolute right-[30%] top-[40%] h-56 w-56 rounded-full bg-gold/15 blur-3xl"
+      />
+
+      {/* 2. Faint dot grid with a roaming spotlight */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            'radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+          WebkitMaskImage:
+            'radial-gradient(ellipse at center, black 25%, transparent 75%)',
+          maskImage:
+            'radial-gradient(ellipse at center, black 25%, transparent 75%)',
+        }}
+      />
+      <motion.div
+        animate={reduce ? undefined : { x: ['-28vw', '28vw', '-28vw'], opacity: [0.5, 1, 0.5] }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        className="pointer-events-none absolute left-1/2 top-1/2 -ml-[14rem] -mt-[14rem] h-[28rem] w-[28rem] rounded-full"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(184,132,46,0.22) 0%, transparent 65%)',
+        }}
+      />
+
+      {/* 3. Floating real screens, with parallax on scroll */}
+      {manifestoScreens.map((screen) => (
+        <FloatingScreen
+          key={screen.src}
+          screen={screen}
+          progress={scrollYProgress}
+          reduce={reduce}
+        />
+      ))}
+
+      {/* Keeps the text area dark so it stays readable over the screens */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(21,19,15,0.85)_25%,transparent_70%)]" />
+
+      <div className="container-max relative z-10 px-6 text-center">
+        {/* Text 1 + 2: word-by-word headline, shimmer + underline on the punchline */}
         <motion.h2
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          variants={headlineParent}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.4 }}
           className="font-display mx-auto max-w-4xl text-3xl font-bold leading-snug tracking-tight text-white md:text-5xl"
         >
-          From the idea in your head to the product in your{' '}
-          <span className="text-gold">users' hands.</span>
+          {manifestoWords.map((word, i) => (
+            <span key={`${word}-${i}`}>
+              <motion.span variants={headlineWord} className="inline-block">
+                {word}
+              </motion.span>{' '}
+            </span>
+          ))}
+          <motion.span
+            variants={headlineWord}
+            className="relative inline-block whitespace-nowrap"
+          >
+            <motion.span
+              animate={reduce ? undefined : { backgroundPosition: ['100% 0', '0% 0'] }}
+              transition={{
+                duration: 2.2,
+                repeat: Infinity,
+                repeatDelay: 3,
+                ease: 'easeInOut',
+              }}
+              className="text-gold"
+              style={
+                reduce
+                  ? undefined
+                  : {
+                      backgroundImage:
+                        'linear-gradient(110deg, #B8842E 40%, #F6DC9B 50%, #B8842E 60%)',
+                      backgroundSize: '250% 100%',
+                      backgroundPosition: '100% 0',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }
+              }
+            >
+              users' hands.
+            </motion.span>
+            <svg
+              viewBox="0 0 200 12"
+              preserveAspectRatio="none"
+              className="pointer-events-none absolute -bottom-2 left-0 h-3 w-full"
+              aria-hidden="true"
+            >
+              <motion.path
+                d="M2 8 C 40 2, 100 12, 198 4"
+                fill="none"
+                stroke="#B8842E"
+                strokeWidth="3"
+                strokeLinecap="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.9, delay: 1.3, ease: 'easeOut' }}
+              />
+            </svg>
+          </motion.span>
         </motion.h2>
+
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="mx-auto mt-6 max-w-2xl text-base text-slate-400 md:text-lg"
+          transition={{ duration: 0.7, delay: 0.9 }}
+          className="mx-auto mt-8 max-w-2xl text-base text-slate-300 md:text-lg"
         >
           Mockups don't move businesses. Working products do. Everything you
           see here is live, clickable, and in use today.
         </motion.p>
+
+        {/* 4. Pulsing LIVE chips */}
+        <div className="mx-auto mt-10 flex max-w-2xl flex-wrap justify-center gap-3">
+          {liveProducts.map((name, i) => (
+            <motion.span
+              key={name}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 1.2 + i * 0.1 }}
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-sm font-medium text-slate-200 backdrop-blur"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75 motion-reduce:animate-none" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              </span>
+              {name}
+            </motion.span>
+          ))}
+        </div>
       </div>
     </section>
   )
