@@ -186,11 +186,11 @@ function Hero() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.2, ease: 'easeInOut' }}
-            className="absolute inset-0 h-full w-full object-cover object-top"
+            className="absolute inset-0 h-full w-full scale-105 object-cover object-top blur-[3px]"
           />
         </AnimatePresence>
         {/* Scrim for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/55 to-ink/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/90 via-ink/80 to-ink/90" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent" />
       </div>
 
@@ -199,7 +199,7 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-6 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur"
+          className="mb-6 rounded-full border border-white/30 bg-ink/60 px-4 py-1.5 text-sm font-medium text-white backdrop-blur"
         >
           Product design & engineering, built and shipped in-house
         </motion.span>
@@ -208,7 +208,7 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white md:text-6xl"
+          className="font-display max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white md:text-6xl [text-shadow:0_2px_16px_rgba(0,0,0,0.6)]"
         >
           We design it. We build it.{' '}
           <span className="text-gold">It ships.</span>
@@ -218,7 +218,7 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-8 max-w-2xl text-lg text-white/80 md:text-xl"
+          className="mt-8 max-w-2xl text-lg font-medium text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.8)] md:text-xl"
         >
           Election intelligence platforms. School management systems. AI
           content tools. Support portals. Designed and built in-house, end
@@ -239,7 +239,7 @@ function Hero() {
           </a>
           <a
             href="#contact"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur transition-all hover:bg-white/20"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/40 bg-ink/60 px-8 py-4 text-base font-semibold text-white backdrop-blur transition-all hover:bg-white/20"
           >
             <CalendarClock size={18} /> Talk to a designer
           </a>
