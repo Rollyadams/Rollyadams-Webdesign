@@ -22,6 +22,7 @@ import {
 
 import PhotoShowcase from './PhotoShowcase'
 import ProjectShowcase from './ProjectShowcase'
+import ArchivePhones from './ArchivePhones'
 
 /* ============ BOOKING (Calendly) ============ */
 // Calendly booking link
@@ -903,31 +904,15 @@ function Portfolio() {
           </button>
         </div>
 
-        {/* Archive — floating free */}
+        {/* Archive — 3D phones: staggered, tilting with scroll, tap to flip */}
         {showMore && (
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8"
+            className="mt-14"
           >
-            {archive.map((p, i) => (
-              <div key={p.title} className="group">
-                <TiltCard index={i} maxTilt={9} className="relative mx-auto w-32 sm:w-36">
-                  <ShotFrame
-                    item={p}
-                    phoneClass="w-full transition-transform duration-500 group-hover:-translate-y-1.5"
-                  />
-                </TiltCard>
-                <div className="mt-4">
-                  <span className="text-[11px] font-semibold text-gold">
-                    {p.tag}
-                  </span>
-                  <h4 className="font-display mt-1 font-bold">{p.title}</h4>
-                  <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
-                </div>
-              </div>
-            ))}
+            <ArchivePhones projects={archive} onSelect={setSelected} />
           </motion.div>
         )}
       </div>
