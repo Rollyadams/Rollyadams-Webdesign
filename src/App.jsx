@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 
 import PhotoShowcase from './PhotoShowcase'
+import ProjectShowcase from './ProjectShowcase'
 
 /* ============ BOOKING (Calendly) ============ */
 // Calendly booking link
@@ -834,6 +835,14 @@ function Portfolio() {
           ) : (
             <div className="mx-auto aspect-[1536/1024] w-full max-w-4xl rounded-2xl bg-line/40" />
           )}
+        </div>
+
+        {/* Second showcase: cycling project card (tile grows and scrolls through each site) */}
+        <div className="mt-20 md:mt-28">
+          <p className="mb-6 text-center text-sm font-semibold text-gold">
+            Also shipped
+          </p>
+          <ProjectShowcase projects={archive} onSelect={setSelected} />
         </div>
 
         {/* Selected-project detail overlay */}
