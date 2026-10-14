@@ -120,9 +120,19 @@ function PhoneCard({ project, index, onSelect, reduce }) {
               />
             </button>
 
-            {/* Back face: shows when the phone is flipped */}
+            {/* Back face: tap anywhere on it to flip back to the front */}
             <div
-              className={`absolute inset-0 flex flex-col items-center justify-center rounded-[1.4rem] border-[5px] border-ink bg-ink px-3 text-center shadow-xl ${
+              onClick={flip}
+              role="button"
+              tabIndex={back ? 0 : -1}
+              aria-label={`Flip ${project.title} back to the front`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  flip()
+                }
+              }}
+              className={`absolute inset-0 flex cursor-pointer flex-col items-center justify-center rounded-[1.4rem] border-[5px] border-ink bg-ink px-3 text-center shadow-xl ${
                 back ? '' : 'pointer-events-none'
               }`}
               style={{
@@ -140,17 +150,17 @@ function PhoneCard({ project, index, onSelect, reduce }) {
                 {project.subtitle}
               </p>
               <button
-                onClick={() => onSelect?.(project)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onSelect?.(project)
+                }}
                 className="mt-3 inline-flex items-center gap-1 rounded-md bg-gold px-2.5 py-1.5 text-[11px] font-semibold text-white"
               >
                 View <ArrowUpRight size={12} />
               </button>
-              <button
-                onClick={flip}
-                className="mt-2 text-[10px] text-slate-400 underline underline-offset-2"
-              >
-                Flip back
-              </button>
+              <span className="mt-2 text-[10px] text-slate-400">
+                Tap to flip back
+              </span>
             </div>
           </motion.div>
         </motion.div>
