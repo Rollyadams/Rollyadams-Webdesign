@@ -45,3 +45,10 @@
 .marquee:hover .marquee-track {
   animation-play-state: paused;
 }
+
+/* Safety net: nothing should ever push the page wider than the screen */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
