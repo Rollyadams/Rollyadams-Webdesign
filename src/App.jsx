@@ -18,6 +18,7 @@ import {
   ChevronDown,
   Mail,
   Send,
+  ShieldCheck,
 } from 'lucide-react'
 
 import PhotoShowcase from './PhotoShowcase'
@@ -1230,7 +1231,11 @@ function Footer() {
             <Mail size={16} /> {STUDIO_EMAIL}
           </a>
           <p className="mt-6 text-xs text-slate-500">
-            Part of the Rollyadams Techworld family brand.
+            Rollyadams WebStudio is operated by Rollyadams Techworld Ltd.
+          </p>
+          <p className="mt-2 inline-flex items-center gap-2 text-xs text-slate-400">
+            <ShieldCheck size={14} className="text-gold" />
+            Registered with the Corporate Affairs Commission, Nigeria
           </p>
         </div>
       </div>
@@ -1238,10 +1243,10 @@ function Footer() {
       <div className="border-t border-white/10">
         <div className="container-max flex flex-col items-center justify-between gap-2 px-6 py-6 text-xs text-slate-500 sm:flex-row">
           <span>
-            © {new Date().getFullYear()} Rollyadams WebStudio. All rights
+            © {new Date().getFullYear()} Rollyadams Techworld Ltd. All rights
             reserved.
           </span>
-          <span>Lagos, Nigeria</span>
+          <span>RC 9930816 · Lagos, Nigeria</span>
         </div>
       </div>
     </footer>
