@@ -24,6 +24,7 @@ import {
 import PhotoShowcase from './PhotoShowcase'
 import ProjectShowcase from './ProjectShowcase'
 import ArchivePhones from './ArchivePhones'
+import CaseStudies from './CaseStudies'
 
 /* ============ BOOKING (Calendly) ============ */
 // Calendly booking link
@@ -718,7 +719,7 @@ const featured = [
     label: 'Career Builder Schools',
     img: '/images/cbs-home.jpg',
     pos: 'object-[50%_30%]',
-    link: '#',
+    link: 'https://www.careerbuilderschools.com',
   },
   {
     tag: 'Web App',
@@ -749,6 +750,7 @@ const archive = [
     label: 'School Resource Center',
     img: '/images/src-login.jpg',
     pos: 'object-[50%_35%]',
+    link: 'https://schools.rollyadamstechworld.com.ng',
   },
   {
     tag: 'AI Tools',
@@ -776,6 +778,7 @@ const archive = [
     label: 'admin.hhfoundation.com.ng',
     img: '/images/hhf-dashboard.jpg',
     pos: 'object-center',
+    link: 'https://admin.hhfoundation.com.ng/login',
   },
   {
     tag: 'Mobile Web App',
@@ -793,6 +796,7 @@ const archive = [
     label: 'Career Builder Schools',
     img: '/images/cbs-gallery.jpg',
     pos: 'object-top',
+    link: 'https://www.careerbuilderschools.com/#gallery',
   },
   {
     tag: 'Dashboard',
@@ -802,6 +806,7 @@ const archive = [
     label: 'School Resource Center',
     img: '/images/src-dashboard.jpg',
     pos: 'object-top',
+    link: 'https://schools.rollyadamstechworld.com.ng',
   },
 ]
 
@@ -987,6 +992,7 @@ const WEB3FORMS_KEY = 'd8fb104e-d2dd-46f6-a323-592c0a7602ab'
 
 function Contact() {
   const [status, setStatus] = useState('idle') // idle | sending | success | error
+  const formRef = useRef(null)
 
   const mailtoFallback = (data) => {
     const subject = encodeURIComponent(`New project inquiry — ${data.get('name')}`)
@@ -1031,9 +1037,11 @@ function Contact() {
         setStatus('success')
         form.reset()
       } else {
+        console.error('Web3Forms rejected the message:', json)
         setStatus('error')
       }
-    } catch {
+    } catch (err) {
+      console.error('Contact form request failed:', err)
       setStatus('error')
     }
   }
@@ -1074,6 +1082,7 @@ function Contact() {
         </motion.div>
 
         <motion.form
+          ref={formRef}
           onSubmit={handleSubmit}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1165,7 +1174,16 @@ function Contact() {
           )}
           {status === 'error' && (
             <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
-              Something went wrong. Please email us directly at{' '}
+              We couldn't send that just now, but your message is still in the
+              form.{' '}
+              <button
+                type="button"
+                onClick={() => mailtoFallback(new FormData(formRef.current))}
+                className="font-semibold underline"
+              >
+                Send it through your email app instead
+              </button>
+              , or write to{' '}
               <a href={`mailto:${STUDIO_EMAIL}`} className="underline">{STUDIO_EMAIL}</a>.
             </p>
           )}
@@ -1264,6 +1282,7 @@ export default function App() {
         <Manifesto />
         <Services />
         <Portfolio />
+        <CaseStudies />
         <About />
         <Contact />
       </main>
