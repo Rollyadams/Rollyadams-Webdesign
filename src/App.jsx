@@ -1264,7 +1264,11 @@ function Footer() {
             © {new Date().getFullYear()} Rollyadams Techworld Ltd. All rights
             reserved.
           </span>
-          <span>RC 9930816 · Lagos, Nigeria</span>
+          <span className="flex items-center gap-4">
+            <a href="/privacy.html" className="hover:text-white">Privacy</a>
+            <a href="/terms.html" className="hover:text-white">Terms</a>
+            <span>RC 9930816 · Lagos, Nigeria</span>
+          </span>
         </div>
       </div>
     </footer>
